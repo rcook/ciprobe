@@ -5,7 +5,7 @@ environment:
     - APPVEYOR_BUILD_WORKER_IMAGE: Ubuntu
 
 install:
-  - ps: .\probe.ps1
+  - ps: .\build.ps1
 
 build: false
 
