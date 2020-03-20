@@ -88,4 +88,4 @@ function main {
 }
 
 Write-Output 'Install step'
-main -DumpEnv $DumpEnv
+main -DumpEnv $DumpEnv -Clean $Clean
