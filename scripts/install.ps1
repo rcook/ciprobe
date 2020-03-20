@@ -26,9 +26,11 @@ function dumpEnv {
     $thisDir = $PSScriptRoot
     $currentDir = Get-Location
 
-    Write-Output "IsLinux: $IsLinux"
-    Write-Output "IsMacOS: $IsMacOS"
-    Write-Output "IsWindows: $IsWindows"
+    Write-Output "isLinux: $(Get-IsLinux)"
+    Write-Output "isMacOS: $(Get-IsMacOS)"
+    Write-Output "isWindows: $(Get-IsWindows)"
+    Write-Output "executableFileName: $(Get-ExecutableFileName -BaseName base-name)"
+
     Write-Output "thisDir: $thisDir"
     Write-Output "currentDir: $currentDir"
 
