@@ -7,6 +7,7 @@
 * `APPVEYOR_BUILD_NUMBER` is build number (same for all jobs)
 * `APPVEYOR_BUILD_VERSION` is build version (same for all jobs)
 * `APPVEYOR_JOB_ID` is unique for each job
+* `APPVEYOR_PROJECT_SLUG` is the project name's slug
 * `APPVEYOR_REPO_COMMIT` is commit hash
 * Repo is in detached-`HEAD` state checked out at `APPVEYOR_REPO_COMMIT`
 

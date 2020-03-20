@@ -101,6 +101,7 @@ function getPlatformId {
 }
 
 class Version {
+    [string] $ProjectSlug
     [bool] $IsTag
     [bool] $IsBranch
     [string] $RefName
@@ -121,6 +122,7 @@ function getVersionAppVeyor {
     [OutputType([Version])]
     param()
 
+    $projectSlug = $env:APPVEYOR_PROJECT_SLUG
     $isTag = $env:APPVEYOR_REPO_TAG -eq 'true'
     $isBranch = $env:APPVEYOR_REPO_TAG -ne 'true'
     $refName = $env:APPVEYOR_REPO_BRANCH
@@ -175,6 +177,7 @@ function getVersionAppVeyor {
     $fullVersion += "-$platformId"
 
     [Version] @{
+        ProjectSlug = $projectSlug
         IsTag = $isTag
         IsBranch = $isBranch
         RefName = $refName
@@ -193,4 +196,19 @@ function getVersionAppVeyor {
 }
 
 #dumpEnv
-Write-Output (getVersionAppVeyor)
+
+$version = getVersionAppVeyor
+$baseName = "$($version.ProjectSlug)-$($version.FullVersion)"
+
+$artifactsDir = Join-Path -Path $env:APPVEYOR_BUILD_FOLDER -ChildPath _artifacts
+New-Item -ErrorAction Ignore -ItemType Directory -Path $artifactsDir | Out-Null
+$stagingDir = Join-Path -Path $artifactsDir -ChildPath $baseName
+New-Item -ErrorAction Ignore -ItemType Directory -Path $stagingDir | Out-Null
+
+Write-Output $version | Out-File -Encoding ascii -FilePath $stagingDir\version.txt
+Write-Output 'Hello world' | Out-File -Encoding ascii -FilePath $stagingDir\data.txt
+
+Compress-Archive `
+    -DestinationPath $artifactsDir\$baseName.zip `
+    -CompressionLevel Optimal `
+    -Path $stagingDir
