@@ -8,6 +8,6 @@ export APPVEYOR_REPO_TAG=true
 export APPVEYOR_REPO_BRANCH=v101
 export APPVEYOR_PROJECT_SLUG=ciprobe
 
-pwsh $this_dir/scripts/install.ps1
-pwsh $this_dir/scripts/build.ps1
-pwsh $this_dir/scripts/test.ps1
+pwsh $this_dir/install.ps1
+pwsh $this_dir/build.ps1
+pwsh $this_dir/test.ps1

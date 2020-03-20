@@ -3,10 +3,6 @@ set -euo pipefail
 
 this_dir=$(cd $(dirname $0); pwd -P)
 
-invoke() {
-  pwsh $this_dir/scripts/$1.ps1
-}
-
-invoke install
-invoke build
-invoke test
+pwsh $this_dir/install.ps1
+pwsh $this_dir/build.ps1
+pwsh $this_dir/test.ps1
