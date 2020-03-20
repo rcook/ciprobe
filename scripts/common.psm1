@@ -1,17 +1,11 @@
 <#
 .SYNOPSIS
-    Install step.
+    Common functions.
 
 .DESCRIPTION
-    Install step.
+    Common functions.
 #>
 #Requires -Version 5
-
-[CmdletBinding()]
-param(
-    [switch] $Trace,
-    [switch] $DumpEnv
-)
 
 $ErrorActionPreference = 'Stop'
 Set-StrictMode -Version Latest
