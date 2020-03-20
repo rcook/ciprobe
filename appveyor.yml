@@ -1,12 +1,24 @@
 environment:
+  CHANNEL: nightly
   matrix:
     - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
+      TARGET: x86_64-pc-windows-msvc
     - APPVEYOR_BUILD_WORKER_IMAGE: macOS
+      TARGET: x86_64-apple-darwin
     - APPVEYOR_BUILD_WORKER_IMAGE: Ubuntu
+      TARGET: x86_64-unknown-linux-gnu
 
 build: false
 
+# TBD: Install rustup from install.ps1!
 install:
+  - sh: curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- --default-host $TARGET --default-toolchain $CHANNEL --profile minimal -y
+  - sh: source $HOME/.cargo/env
+  - cmd: appveyor-retry appveyor DownloadFile https://win.rustup.rs/ -FileName rustup-init.exe
+  - cmd: set PATH=%PATH%;C:\Users\appveyor\.cargo\bin
+  - cmd: rustup-init.exe --default-host %TARGET% --default-toolchain %CHANNEL% --profile minimal -y
+  - rustc -Vv
+  - cargo --version
   - ps: .\scripts\install.ps1
 
 build_script:
