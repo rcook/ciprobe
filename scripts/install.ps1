@@ -10,7 +10,7 @@
 [CmdletBinding()]
 param(
     [switch] $Trace,
-    [switch] $DumpEnv
+    [switch] $DumpEnv,
     [switch] $Clean
 )
 
