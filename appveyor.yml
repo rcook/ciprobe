@@ -15,8 +15,10 @@ install:
   - sh: curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- --default-host $RUST_PLATFORM_TRIPLE --default-toolchain $RUST_CHANNEL --profile minimal -y
   - sh: source $HOME/.cargo/env
   - cmd: appveyor-retry appveyor DownloadFile https://win.rustup.rs/ -FileName rustup-init.exe
-  - cmd: set PATH=%PATH%;C:\Users\appveyor\.cargo\bin
   - cmd: rustup-init.exe --default-host %RUST_PLATFORM_TRIPLE% --default-toolchain %RUST_CHANNEL% --profile minimal -y
+  - cmd: set PATH=%PATH%;C:\Users\appveyor\.cargo\bin
+  - ps: .\scripts\bootstrap.ps1
+  - ps: Write-Output "env:FOO = $($env:FOO)"
   - ps: .\scripts\install.ps1 -DumpEnv -Detailed
 
 build_script:
