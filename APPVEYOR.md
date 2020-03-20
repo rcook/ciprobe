@@ -1,6 +1,8 @@
 # AppVeyor environment
 
-## Common
+## Branch build (`master` and other)
+
+Triggered when pushing a _branch_ to GitHub
 
 * `$thisDir`, `$currentDir` and `APPVEYOR_BUILD_FOLDER` all set to Git repo root directory
 * `APPVEYOR_BUILD_ID` is build ID (same for all jobs)
@@ -13,21 +15,21 @@
 * No tags show up
 * Repo is in detached `HEAD` state checked out at `APPVEYOR_REPO_COMMIT`
 
-## Windows
+### Windows
 
 * `$IsWindows` is `True`
 * `APPVEYOR` is `True`
 * `APPVEYOR_BUILD_WORKER_IMAGE` is `Visual Studio 2015`
 * `CI` is `True`
 
-## Linux
+### Linux
 
 * `$IsLinux` is `True`
 * `APPVEYOR` is `True`
 * `APPVEYOR_BUILD_WORKER_IMAGE` is `Ubuntu`
 * `CI` is `true`
 
-## macOS
+### macOS
 
 * `$IsMacOS` is `True`
 * `APPVEYOR` is `true`
