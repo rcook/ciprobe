@@ -65,6 +65,8 @@ function main {
 
     cargo build
     #Invoke-ExternalCommand cargo build
+
+    cargo build --release
     #Invoke-ExternalCommand cargo build --release
 
     $targetDir = Resolve-Path -Path "$($buildInfo.BuildDir)\target"
