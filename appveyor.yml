@@ -1,0 +1,22 @@
+environment:
+  matrix:
+    - TARGET: x86_64-pc-windows-msvc
+    - APPVEYOR_BUILD_WORKER_IMAGE: macOS
+      TARGET: x86_64-apple-darwin
+    - APPVEYOR_BUILD_WORKER_IMAGE: Ubuntu
+      TARGET: x86_64-unknown-linux-gnu
+
+install:
+  - ps: $ErrorActionPreference = 'Stop'
+  - ps: .\probe.ps1
+
+build: false
+
+build_script:
+  - echo build_script
+
+test_script:
+  - echo test_script
+
+artifacts:
+  - path: _artifacts/*.txt
