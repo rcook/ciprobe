@@ -20,6 +20,10 @@ install:
   - ps: .\scripts\install.ps1
 
 build_script:
+  - echo HELLO
+  - rustc -Vv
+  - cargo -Vv
+  - echo WORLD
   - cargo build
 #  - ps: .\scripts\build.ps1
 
