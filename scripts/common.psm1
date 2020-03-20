@@ -165,9 +165,10 @@ function Get-AppVeyorBuildInfo {
     $isTag = (getEnv -Name APPVEYOR_REPO_TAG) -eq 'true'
     $isBranch = (getEnv -Name APPVEYOR_REPO_TAG) -ne 'true'
     $refName = getEnv -Name APPVEYOR_REPO_BRANCH
+    $repoName = getEnv -Name APPVEYOR_REPO_NAME
 
-    $homePageUri = 'HOME-PAGE-URI'
-    $releasesUri = 'RELEASES-URI'
+    $homePageUri = "https://github.com/$repoName"
+    $releasesUri = "https://github.com/$repoName/releases/latest"
     $gitDescription = $(Invoke-ExternalCommand git describe --long --dirty --match='v[0-9]*')
     $gitDescriptionParts = $gitDescription.Split('-')
     if ($gitDescriptionParts.Length -eq 3) {
