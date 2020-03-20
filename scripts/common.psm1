@@ -77,7 +77,7 @@ function Get-ExecutableFileName {
 
     if (Get-IsWindows) {
         "$($BaseName).exe"
-    } elseif (Get-IsLinux -or Get-IsMacOS) {
+    } elseif ((Get-IsLinux) -or (Get-IsMacOS)) {
         $BaseName
     } else {
         throw 'Unsupported platform'

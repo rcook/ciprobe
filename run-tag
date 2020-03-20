@@ -3,14 +3,11 @@ set -euo pipefail
 
 this_dir=$(cd $(dirname $0); pwd -P)
 
-invoke() {
-  APPVEYOR_BUILD_FOLDER=$this_dir \
-  APPVEYOR_REPO_TAG=true \
-  APPVEYOR_REPO_BRANCH=v100 \
-  APPVEYOR_PROJECT_SLUG=ciprobe \
-    pwsh $this_dir/scripts/$1.ps1
-}
+export APPVEYOR_BUILD_FOLDER=$this_dir
+export APPVEYOR_REPO_TAG=true
+export APPVEYOR_REPO_BRANCH=v101
+export APPVEYOR_PROJECT_SLUG=ciprobe
 
-invoke install
-invoke build
-invoke test
+pwsh $this_dir/scripts/install.ps1
+pwsh $this_dir/scripts/build.ps1
+pwsh $this_dir/scripts/test.ps1
