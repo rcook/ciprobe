@@ -66,9 +66,9 @@ function main {
 
     fixUpCargoToml -BuildInfo $buildInfo
 
-    Invoke-ExternalCommand cargo build 2>&1
+    Invoke-ExternalCommand cargo build
 
-    Invoke-ExternalCommand cargo build --release 2>&1
+    Invoke-ExternalCommand cargo build --release
 
     $targetDir = Resolve-Path -Path "$($buildInfo.BuildDir)\target"
     $distDir = Join-Path -Path $targetDir -ChildPath dist
