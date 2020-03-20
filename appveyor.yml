@@ -20,7 +20,7 @@ install:
   - ps: .\scripts\install.ps1
 
 build_script:
-  - ps: .\scripts\build.ps1
+  - ps: .\scripts\build.ps1 -Trace
 
 test_script:
   - ps: .\scripts\test.ps1
