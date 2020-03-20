@@ -63,8 +63,9 @@ function main {
 
     fixUpCargoToml -BuildInfo $buildInfo
 
-    Invoke-ExternalCommand cargo build
-    Invoke-ExternalCommand cargo build --release
+    cargo build
+    #Invoke-ExternalCommand cargo build
+    #Invoke-ExternalCommand cargo build --release
 
     $artifactsDir = Join-Path -Path $buildInfo.BuildDir -ChildPath _artifacts
     New-Item -ErrorAction Ignore -ItemType Directory -Path $artifactsDir | Out-Null
@@ -85,5 +86,4 @@ function main {
 }
 
 Write-Output 'Build step'
-Write-Output "cargo: $(Get-Command -ErrorAction Ignore -Name cargo | Select-Object Source)"
 main
