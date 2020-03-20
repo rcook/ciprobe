@@ -25,6 +25,7 @@ function Get-IsWindows() {
 
     (Get-Variable -ErrorAction Ignore -Name IsWindows -Scope Global) -or (($env:OS -ne $null) -and ($env:OS.IndexOf('Windows', [StringComparison]::OrdinalIgnoreCase) -ge 0))
 }
+Export-ModuleMember -Function Get-IsWindows
 
 function Get-IsLinux() {
     [OutputType([bool])]
@@ -32,6 +33,7 @@ function Get-IsLinux() {
 
     Get-Variable -ErrorAction Ignore -Name IsLinux -Scope Global
 }
+Export-ModuleMember -Function Get-IsLinux
 
 function Get-IsMacOS() {
     [OutputType([bool])]
@@ -39,6 +41,7 @@ function Get-IsMacOS() {
 
     Get-Variable -ErrorAction Ignore -Name IsMacOS -Scope Global
 }
+Export-ModuleMember -Function Get-IsMacOS
 
 function Invoke-ExternalCommand {
     param()
