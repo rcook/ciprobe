@@ -23,7 +23,8 @@ function Get-IsWindows() {
     [OutputType([bool])]
     param()
 
-    if ([bool] (Get-Variable -ErrorAction Ignore -Name IsWindows -Scope Global).Value) {
+    $var = Get-Variable -ErrorAction Ignore -Name IsWindows -Scope Global
+    if ($var -ne $null -and ([bool] $var.Value)) {
         $true
     } else {
         ($env:OS -ne $null) -and ($env:OS.IndexOf('Windows', [StringComparison]::OrdinalIgnoreCase) -ge 0)
@@ -35,7 +36,8 @@ function Get-IsLinux() {
     [OutputType([bool])]
     param()
 
-    [bool] (Get-Variable -ErrorAction Ignore -Name IsLinux -Scope Global).Value
+    $var = Get-Variable -ErrorAction Ignore -Name IsLinux -Scope Global
+    ($var -ne $null -and ([bool] $var.Value))
 }
 Export-ModuleMember -Function Get-IsLinux
 
@@ -43,7 +45,8 @@ function Get-IsMacOS() {
     [OutputType([bool])]
     param()
 
-    [bool] (Get-Variable -ErrorAction Ignore -Name IsMacOS -Scope Global).Value
+    $var = Get-Variable -ErrorAction Ignore -Name IsMacOS -Scope Global
+    ($var -ne $null -and ([bool] $var.Value))
 }
 Export-ModuleMember -Function Get-IsMacOS
 
