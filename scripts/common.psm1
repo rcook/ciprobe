@@ -65,7 +65,7 @@ function Invoke-ExternalCommand {
     }
 
     $saved = $ErrorActionPreference
-    $ErrorActionPreference = 'Ignore'
+    $ErrorActionPreference = 'SilentlyContinue'
     & $command $commandArgs
     $result = $LastExitCode
     $ErrorActionPreference = $saved
