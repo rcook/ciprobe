@@ -77,8 +77,14 @@ function main {
     Invoke-ExternalCommand cargo build --release
 
     $targetDir = Resolve-Path -Path "$($buildInfo.BuildDir)\target"
+
     $distDir = Join-Path -Path $targetDir -ChildPath dist
+    if (Test-Path -Path $distDir) {
+        Remove-Item -Force -Recurse -Path $distDir
+    }
     New-Item -ErrorAction Ignore -ItemType Directory -Path $distDir | Out-Null
+    $distDir = Resolve-Path -Path $distDir
+
     Write-Output $buildInfo | Out-File -Encoding ascii -FilePath $distDir\build.txt
     Write-Output $buildInfo.Version | Out-File -Encoding ascii -FilePath $distDir\version.txt
 
