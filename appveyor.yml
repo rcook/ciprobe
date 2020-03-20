@@ -17,7 +17,7 @@ install:
   - cmd: appveyor-retry appveyor DownloadFile https://win.rustup.rs/ -FileName rustup-init.exe
   - cmd: set PATH=%PATH%;C:\Users\appveyor\.cargo\bin
   - cmd: rustup-init.exe --default-host %RUST_PLATFORM_TRIPLE% --default-toolchain %RUST_CHANNEL% --profile minimal -y
-  - ps: .\scripts\install.ps1
+  - ps: .\scripts\install.ps1 -DumpEnv
 
 build_script:
   - ps: .\scripts\build.ps1
