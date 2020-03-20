@@ -25,11 +25,13 @@ build_script:
   - echo B
   - ps: cargo -Vv
   - echo C
-  - ps: "$ErrorActionPreference = 'SilentlyContinue'; cargo build; $ErrorActionPreference = 'Stop'"
+  - ps: "$ErrorActionPreference = 'SilentlyContinue'
+  - ps: cargo build
+  - ps: "$ErrorActionPreference = 'Stop'"
   - echo D
   - ps: cargo build
   - echo E
-#  - ps: .\scripts\build.ps1
+  - ps: .\scripts\build.ps1
 
 test_script:
   - ps: .\scripts\test.ps1
