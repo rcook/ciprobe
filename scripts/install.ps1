@@ -73,9 +73,9 @@ function dumpEnv {
 function main {
     [OutputType([void])]
     param(
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory = $true)]
         [bool] $DumpEnv,
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory = $true)]
         [bool] $Clean
     )
 

@@ -135,6 +135,7 @@ Export-ModuleMember -Function Get-ExecutableFileName
 
 
 class Version {
+    [string] $HomePageUri
     [string] $GitDescription
     [bool] $IsDirty
     [string] $PlatformId
@@ -158,6 +159,7 @@ function Get-AppVeyorBuildInfo {
     $isBranch = (getEnv -Name APPVEYOR_REPO_TAG) -ne 'true'
     $refName = getEnv -Name APPVEYOR_REPO_BRANCH
 
+    $homePageUri = 'HOME-PAGE-URI'
     $gitDescription = $(Invoke-ExternalCommand git describe --long --dirty --match='v[0-9]*')
     $gitDescriptionParts = $gitDescription.Split('-')
     if ($gitDescriptionParts.Length -eq 3) {
@@ -210,6 +212,7 @@ function Get-AppVeyorBuildInfo {
     $fullVersion += "-$platformId"
 
     $version = [Version] @{
+        HomePageUri    = $homePageUri
         GitDescription = $gitDescription
         IsDirty        = $isDirty
         PlatformId     = $platformId
