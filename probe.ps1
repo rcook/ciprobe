@@ -105,6 +105,12 @@ class Version {
     [string] $GitDescription
     [bool] $IsDirty
     [string] $PlatformId
+    [string] $Version
+    [int] $Offset
+    [object] $VersionParts
+    [object] $Major
+    [object] $Minor
+    [object] $Patch
     [string] $FullVersion
 }
 
@@ -115,14 +121,31 @@ function getVersionAppVeyor {
     $isTagged = $env:APPVEYOR_REPO_TAG -eq 'true'
 
     $gitDescription = $(invoke git describe --long --dirty --match='v[0-9]*')
-    $parts = $gitDescription.Split('-')
-    if ($parts.Length -eq 3) {
+    $gitDescriptionParts = $gitDescription.Split('-')
+    if ($gitDescriptionParts.Length -eq 3) {
+        $version = $gitDescriptionParts[0]
+        $offset = [int] $gitDescriptionParts[1]
         $isDirty = $false
-    } elseif (($parts.Length -eq 4) -and ($parts[3] -eq 'dirty')) {
+    } elseif (($gitDescriptionParts.Length -eq 4) -and ($gitDescriptionParts[3] -eq 'dirty')) {
+        $version = $gitDescriptionParts[0]
+        $offset = [int] $gitDescriptionParts[1]
         $isDirty = $true
     } else {
-        throw "Invalid git description $gitDescription"
+        throw "Invalid Git description $gitDescription"
     }
+
+    if ($version[0] -ne 'v') {
+        throw "Invalid version $version"
+    }
+
+    $versionParts = $version.Substring(1).Split('.')
+    if (($versionParts.Length -lt 1) -or ($versionParts.Length -gt 3)) {
+        throw "Invalid version $version"
+    }
+
+    $major = if ($versionParts.Length -gt 0) { [int] $versionParts[0] } else { $null }
+    $minor = if ($versionParts.Length -gt 1) { [int] $versionParts[1] } else { $null }
+    $patch = if ($versionParts.Length -gt 2) { [int] $versionParts[2] } else { $null }
 
     $platformId = getPlatformId
     $fullVersion = "$gitDescription-$platformId"
@@ -132,6 +155,12 @@ function getVersionAppVeyor {
         GitDescription = $gitDescription
         IsDirty = $isDirty
         PlatformId = $platformId
+        Version = $version
+        Offset = $offset
+        VersionParts = $versionParts
+        Major = $major
+        Minor = $minor
+        Patch = $patch
         FullVersion = $fullVersion
     }
 }
