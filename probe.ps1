@@ -213,4 +213,4 @@ Compress-Archive `
     -CompressionLevel Optimal `
     -Path $stagingDir
 
-throw 'FAIL'
+exit 1
