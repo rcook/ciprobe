@@ -7,8 +7,6 @@ environment:
 build: false
 
 install:
-  - ps: Write-Output "t=$($env:GitHub_auth_token)"
-  - ps: Write-Output "t=$($env:SUPER_SECRET)"
   - ps: .\scripts\install.ps1
 
 build_script:
@@ -27,8 +25,8 @@ deploy:
   description: Official release
   artifact: zip
   auth_token:
-    secure: $(GitHub_auth_token)
+    secure: KnsNe82iVYE0/gNPx55EdNiJ3q5rM9GKu+y8E/Fz5tCnybP3NZj0PEbLabX9wZzY
   provider: GitHub
   on:
     branch: master
-#    APPVEYOR_REPO_TAG: true
+    APPVEYOR_REPO_TAG: true
