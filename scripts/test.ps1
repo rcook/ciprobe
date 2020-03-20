@@ -24,8 +24,9 @@ function main {
     [OutputType([void])]
     param()
 
-    Invoke-ExternalCommand cargo test
-    Invoke-ExternalCommand cargo test --release
+    Invoke-ExternalCommand cargo test 2>&1
+
+    Invoke-ExternalCommand cargo test --release 2>&1
 }
 
 Write-Output 'Test step'
