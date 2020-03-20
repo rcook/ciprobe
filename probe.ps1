@@ -101,7 +101,9 @@ function getPlatformId {
 }
 
 class Version {
-    [bool] $IsTagged
+    [bool] $IsTag
+    [bool] $IsBranch
+    [string] $RefName
     [string] $GitDescription
     [bool] $IsDirty
     [string] $PlatformId
@@ -119,7 +121,9 @@ function getVersionAppVeyor {
     [OutputType([Version])]
     param()
 
-    $isTagged = $env:APPVEYOR_REPO_TAG -eq 'true'
+    $isTag = $env:APPVEYOR_REPO_TAG -eq 'true'
+    $isBranch = $env:APPVEYOR_REPO_TAG -ne 'true'
+    $refName = $env:APPVEYOR_REPO_BRANCH
 
     $gitDescription = $(invoke git describe --long --dirty --match='v[0-9]*')
     $gitDescriptionParts = $gitDescription.Split('-')
@@ -164,10 +168,16 @@ function getVersionAppVeyor {
         $fullVersion += '-dirty'
     }
 
+    if ($isBranch) {
+        $fullVersion += "-$refName"
+    }
+
     $fullVersion += "-$platformId"
 
     [Version] @{
-        IsTagged = $isTagged
+        IsTag = $isTag
+        IsBranch = $isBranch
+        RefName = $refName
         GitDescription = $gitDescription
         IsDirty = $isDirty
         PlatformId = $platformId
