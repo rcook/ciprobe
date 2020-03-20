@@ -18,11 +18,12 @@ test_script:
 artifacts:
   - path: _artifacts/build.txt
   - path: _artifacts/version.txt
-  - path: _artifacts/*.zip
+  - name: zip
+    path: _artifacts/*.zip
 
 deploy:
   description: Official release
-  artifact: _artifacts/*.zip
+  artifact: zip
   auth_token:
     secure: '%GitHub_auth_token%'
   provider: GitHub
