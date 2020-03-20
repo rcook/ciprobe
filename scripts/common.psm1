@@ -246,14 +246,14 @@ function Get-LocalBuildInfo {
     param()
 
     $version = [Version] @{
-        HomePageUri    = '(none)'
-        ReleasesUri    = '(none)'
-        GitDescription = '(none)'
+        HomePageUri    = '(home-page-uri)'
+        ReleasesUri    = '(releases-uri)'
+        GitDescription = '(git-descriptoin)'
         IsDirty        = $false
-        PlatformId     = '(none)'
-        Version        = '(none)'
+        PlatformId     = '(platform-id)'
+        Version        = '(version)'
         CommitOffset   = 0
-        CommitHash     = '(none)'
+        CommitHash     = '(commit-hash)'
         VersionParts   = @()
         Major          = $null
         Minor          = $null
@@ -263,10 +263,10 @@ function Get-LocalBuildInfo {
 
     [BuildInfo] @{
         BuildDir    = Resolve-Path -Path $PSScriptRoot\..
-        ProjectSlug = '(none)'
+        ProjectSlug = '(project-slug)'
         IsTag       = $false
         IsBranch    = $false
-        RefName     = '(none)'
+        RefName     = '(ref-name)'
         Version     = $version
     }
 }
