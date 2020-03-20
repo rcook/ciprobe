@@ -108,38 +108,56 @@ function main {
     }
 
     if ($RustupInit) {
+        $rustChannel = 'nightly'
+
         if (Get-IsWindows) {
             $rustupInitUri = 'https://win.rustup.rs'
             $rustPlatformTriple = 'x86_64-pc-windows-msvc'
-            $rustupInitShell = ''
             $rustupInitPath = ".\rustup-init.exe"
+
+            if (-not (Test-Path -Path $rustupInitPath)) {
+                Invoke-WebRequest -Uri $rustupInitUri -OutFile $rustupInitPath
+            }
+    
+            Invoke-ExternalCommand $rustupInitPath -- `
+                --default-host $rustPlatformTriple `
+                --default-toolchain $rustChannel `
+                --profile minimal `
+                -y
         }
         elseif (Get-IsLinux) {
             $rustupInitUri = 'https://sh.rustup.rs'
             $rustPlatformTriple = 'x86_64-unknown-linux-gnu'
-            $rustupInitShell = 'sh'
             $rustupInitPath = './rustup-init.sh'
+
+            if (-not (Test-Path -Path $rustupInitPath)) {
+                Invoke-WebRequest -Uri $rustupInitUri -OutFile $rustupInitPath
+            }
+    
+            Invoke-ExternalCommand sh $rustupInitPath -- `
+                --default-host $rustPlatformTriple `
+                --default-toolchain $rustChannel `
+                --profile minimal `
+                -y
         }
         elseif (Get-IsMacOS) {
             $rustupInitUri = 'https://sh.rustup.rs'
             $rustPlatformTriple = 'x86_64-apple-darwin'
-            $rustupInitShell = 'sh'
             $rustupInitPath = './rustup-init.sh'
+
+            if (-not (Test-Path -Path $rustupInitPath)) {
+                Invoke-WebRequest -Uri $rustupInitUri -OutFile $rustupInitPath
+            }
+    
+            Invoke-ExternalCommand sh $rustupInitPath -- `
+                --default-host $rustPlatformTriple `
+                --default-toolchain $rustChannel `
+                --profile minimal `
+                -y
         }
         else {
             throw 'Unsupported platform'
         }
-
-        if (-not (Test-Path -Path $rustupInitPath)) {
-            Invoke-WebRequest -Uri $rustupInitUri -OutFile $rustupInitPath
-        }
-
-        $rustChannel = 'nightly'
-        Invoke-ExternalCommand $rustupInitShell $rustupInitPath -- `
-            --default-host $rustPlatformTriple `
-            --default-toolchain $rustChannel `
-            --profile minimal `
-            -y
     }
 }
 
