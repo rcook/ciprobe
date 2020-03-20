@@ -1,0 +1,8 @@
+[package]
+name = "hello-world"
+version = "0.1.0"
+description = "Pre-release version"
+authors = ["Richard Cook <rcook@rcook.org>"]
+edition = "2018"
+
+[dependencies]

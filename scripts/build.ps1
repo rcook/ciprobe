@@ -155,22 +155,52 @@ function getAppVeyorBuildInfo {
     }
 }
 
+function fixUpCargoToml {
+    [OutputType([void])]
+    param(
+        [Parameter(Mandatory=$true)]
+        [BuildInfo] $BuildInfo
+    )
+
+    $version = $BuildInfo.Version
+    $cargoVersion = "$($version.Major ?? 0).$($version.Minor ?? 0).$($version.Patch ?? 0)"
+
+    $cargoTomlPath = Resolve-Path -Path "$($BuildInfo.BuildDir)\Cargo.toml"
+    $content = Get-Content -Path $cargoTomlPath -Raw
+    $content = $content -replace 'version = ".+"', "version = `"$cargoVersion`""
+    $content = $content -replace 'description = ".+"', "description = `"$($BuildInfo.Version.FullVersion)`""
+    $content | Out-File -Encoding ascii -FilePath $cargoTomlPath -NoNewline
+}
+
+function main {
+    [OutputType([void])]
+    param()
+
+    $buildInfo = getAppVeyorBuildInfo
+    $baseName = "$($buildInfo.ProjectSlug)-$($buildInfo.Version.FullVersion)"
+
+    fixUpCargoToml -BuildInfo $buildInfo
+
+    Invoke-ExternalCommand cargo build
+    Invoke-ExternalCommand cargo build --release
+
+    $artifactsDir = Join-Path -Path $buildInfo.BuildDir -ChildPath _artifacts
+    New-Item -ErrorAction Ignore -ItemType Directory -Path $artifactsDir | Out-Null
+    Write-Output $buildInfo | Out-File -Encoding ascii -FilePath $artifactsDir\build.txt
+    Write-Output $buildInfo.Version | Out-File -Encoding ascii -FilePath $artifactsDir\version.txt
+
+    $versionPath = Resolve-Path -Path $artifactsDir\version.txt
+    $executablePath = Resolve-Path -Path "$($buildInfo.BuildDir)\target\release\hello-world"
+    $stagingDir = Join-Path -Path $artifactsDir -ChildPath $baseName
+    New-Item -ErrorAction Ignore -ItemType Directory -Path $stagingDir | Out-Null
+    Copy-Item -Path $versionPath -Destination $stagingDir
+    Copy-Item -Path $executablePath -Destination $stagingDir
+
+    Compress-Archive `
+        -DestinationPath $artifactsDir\$baseName.zip `
+        -CompressionLevel Optimal `
+        -Path $stagingDir
+}
+
 Write-Output 'Build step'
-
-$buildInfo = getAppVeyorBuildInfo
-$baseName = "$($buildInfo.ProjectSlug)-$($buildInfo.Version.FullVersion)"
-
-$artifactsDir = Join-Path -Path $buildInfo.BuildDir -ChildPath _artifacts
-New-Item -ErrorAction Ignore -ItemType Directory -Path $artifactsDir | Out-Null
-$stagingDir = Join-Path -Path $artifactsDir -ChildPath $baseName
-New-Item -ErrorAction Ignore -ItemType Directory -Path $stagingDir | Out-Null
-
-Write-Output $buildInfo | Out-File -Encoding ascii -FilePath $artifactsDir\build.txt
-Write-Output $buildInfo.Version | Out-File -Encoding ascii -FilePath $artifactsDir\version.txt
-
-Write-Output $buildInfo.Version | Out-File -Encoding ascii -FilePath $stagingDir\version.txt
-Write-Output 'Hello world' | Out-File -Encoding ascii -FilePath $stagingDir\payload.txt
-Compress-Archive `
-    -DestinationPath $artifactsDir\$baseName.zip `
-    -CompressionLevel Optimal `
-    -Path $stagingDir
+main
