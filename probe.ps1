@@ -9,7 +9,7 @@
 [CmdletBinding()]
 param()
 
-function invoke() {
+function invoke {
     param()
 
     if ($args.Count -eq 0) {
@@ -31,46 +31,50 @@ function invoke() {
 
 $ErrorActionPreference = 'Stop'
 
-$thisDir = $PSScriptRoot
-$currentDir = Get-Location
+function dumpEnv {
+    $thisDir = $PSScriptRoot
+    $currentDir = Get-Location
 
-Write-Output "IsLinux: $IsLinux"
-Write-Output "IsMacOS: $IsMacOS"
-Write-Output "IsWindows: $IsWindows"
-Write-Output "thisDir: $thisDir"
-Write-Output "currentDir: $currentDir"
+    Write-Output "IsLinux: $IsLinux"
+    Write-Output "IsMacOS: $IsMacOS"
+    Write-Output "IsWindows: $IsWindows"
+    Write-Output "thisDir: $thisDir"
+    Write-Output "currentDir: $currentDir"
 
-Write-Output "Files under $($thisDir):"
-Get-ChildItem -Force -Recurse -Path $thisDir | Sort-Object FullName | ForEach-Object {
-    Write-Output "  $($_.FullName)"
-}
-
-if ($thisDir -ne $currentDir) {
-    Write-Output "Files under $($currentDir):"
-    Get-ChildItem -Force -Recurse -Path $currentDir | Sort-Object FullName | ForEach-Object {
+    Write-Output "Files under $($thisDir):"
+    Get-ChildItem -Force -Recurse -Path $thisDir | Sort-Object FullName | ForEach-Object {
         Write-Output "  $($_.FullName)"
     }
+
+    if ($thisDir -ne $currentDir) {
+        Write-Output "Files under $($currentDir):"
+        Get-ChildItem -Force -Recurse -Path $currentDir | Sort-Object FullName | ForEach-Object {
+            Write-Output "  $($_.FullName)"
+        }
+    }
+
+    Write-Output 'Environment:'
+    Get-ChildItem -Path Env: | Sort-Object Key | ForEach-Object {
+        Write-Output "  $($_.Key) = $($_.Value)"
+    }
+
+    Write-Output 'Git log:'
+    invoke git log --oneline --color=never | ForEach-Object {
+        Write-Output "  $_"
+    }
+
+    Write-Output 'Git tags:'
+    invoke git tag | ForEach-Object {
+        Write-Output "  $_ $(invoke git rev-list -n 1 $_)"
+    }
+
+    Write-Output 'Git branches:'
+    invoke git branch -vv -a --color=never | ForEach-Object {
+        Write-Output "  $_"
+    }
+
+    Write-Output 'Git describe:'
+    Write-Output "  $(invoke git describe --long --dirty)"
 }
 
-Write-Output 'Environment:'
-Get-ChildItem -Path Env: | Sort-Object Key | ForEach-Object {
-    Write-Output "  $($_.Key) = $($_.Value)"
-}
-
-Write-Output 'Git log:'
-invoke git log --oneline --color=never | ForEach-Object {
-    Write-Output "  $_"
-}
-
-Write-Output 'Git tags:'
-invoke git tag | ForEach-Object {
-    Write-Output "  $_ $(invoke git rev-list -n 1 $_)"
-}
-
-Write-Output 'Git branches:'
-invoke git branch -vv -a --color=never | ForEach-Object {
-    Write-Output "  $_"
-}
-
-Write-Output 'Git describe:'
-Write-Output "  $(invoke git describe --long --dirty)"
+dumpEnv
