@@ -20,11 +20,19 @@ install:
   - ps: .\scripts\install.ps1
 
 build_script:
-  - echo HELLO
+  - echo A
   - rustc -Vv
+  - echo result=$?
+  - echo B
   - cargo -Vv
-  - echo WORLD
+  - echo result=$?
+  - echo C
   - cargo build
+  - echo result=$?
+  - echo D
+  - cargo build --release
+  - echo result=$?
+  - echo E
 #  - ps: .\scripts\build.ps1
 
 test_script:
