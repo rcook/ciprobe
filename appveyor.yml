@@ -1,37 +1,35 @@
 environment:
-  CHANNEL: nightly
+  RUST_CHANNEL: nightly
   matrix:
     - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
-      TARGET: x86_64-pc-windows-msvc
+      RUST_PLATFORM_TRIPLE: x86_64-pc-windows-msvc
     - APPVEYOR_BUILD_WORKER_IMAGE: macOS
-      TARGET: x86_64-apple-darwin
+      RUST_PLATFORM_TRIPLE: x86_64-apple-darwin
     - APPVEYOR_BUILD_WORKER_IMAGE: Ubuntu
-      TARGET: x86_64-unknown-linux-gnu
+      RUST_PLATFORM_TRIPLE: x86_64-unknown-linux-gnu
 
 build: false
 
 # TBD: Install rustup from install.ps1!
 install:
-  - sh: curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- --default-host $TARGET --default-toolchain $CHANNEL --profile minimal -y
+  - sh: curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- --default-host $RUST_PLATFORM_TRIPLE --default-toolchain $RUST_CHANNEL --profile minimal -y
   - sh: source $HOME/.cargo/env
   - cmd: appveyor-retry appveyor DownloadFile https://win.rustup.rs/ -FileName rustup-init.exe
   - cmd: set PATH=%PATH%;C:\Users\appveyor\.cargo\bin
-  - cmd: rustup-init.exe --default-host %TARGET% --default-toolchain %CHANNEL% --profile minimal -y
-  - rustc -Vv
-  - cargo --version
-  - ps: .\scripts\install.ps1 -DumpEnv
+  - cmd: rustup-init.exe --default-host %RUST_PLATFORM_TRIPLE% --default-toolchain %RUST_CHANNEL% --profile minimal -y
+  - ps: .\scripts\install.ps1
 
 build_script:
-  - ps: .\scripts\build.ps1 -Trace
+  - ps: .\scripts\build.ps1
 
 test_script:
   - ps: .\scripts\test.ps1
 
 artifacts:
-  - path: _artifacts/build.txt
-  - path: _artifacts/version.txt
+  - path: target/dist/build.txt
+  - path: target/dist/version.txt
   - name: zip
-    path: _artifacts/*.zip
+    path: target/dist/*.zip
 
 deploy:
   description: Official release

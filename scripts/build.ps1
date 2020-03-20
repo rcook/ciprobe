@@ -67,20 +67,21 @@ function main {
     #Invoke-ExternalCommand cargo build
     #Invoke-ExternalCommand cargo build --release
 
-    $artifactsDir = Join-Path -Path $buildInfo.BuildDir -ChildPath _artifacts
-    New-Item -ErrorAction Ignore -ItemType Directory -Path $artifactsDir | Out-Null
-    Write-Output $buildInfo | Out-File -Encoding ascii -FilePath $artifactsDir\build.txt
-    Write-Output $buildInfo.Version | Out-File -Encoding ascii -FilePath $artifactsDir\version.txt
+    $targetDir = Resolve-Path -Path "$($buildInfo.BuildDir)\target"
+    $distDir = Join-Path -Path $targetDir -ChildPath dist
+    New-Item -ErrorAction Ignore -ItemType Directory -Path $distDir | Out-Null
+    Write-Output $buildInfo | Out-File -Encoding ascii -FilePath $distDir\build.txt
+    Write-Output $buildInfo.Version | Out-File -Encoding ascii -FilePath $distDir\version.txt
 
-    $versionPath = Resolve-Path -Path $artifactsDir\version.txt
-    $executablePath = Resolve-Path -Path "$($buildInfo.BuildDir)\target\release\$(Get-ExecutableFileName -BaseName hello-world)"
-    $stagingDir = Join-Path -Path $artifactsDir -ChildPath $baseName
+    $versionPath = Resolve-Path -Path $distDir\version.txt
+    $executablePath = Resolve-Path -Path "$targetDir\release\$(Get-ExecutableFileName -BaseName hello-world)"
+    $stagingDir = Join-Path -Path $distDir -ChildPath $baseName
     New-Item -ErrorAction Ignore -ItemType Directory -Path $stagingDir | Out-Null
     Copy-Item -Path $versionPath -Destination $stagingDir
     Copy-Item -Path $executablePath -Destination $stagingDir
 
     Compress-Archive `
-        -DestinationPath $artifactsDir\$baseName.zip `
+        -DestinationPath $distDir\$baseName.zip `
         -CompressionLevel Optimal `
         -Path $stagingDir
 }
