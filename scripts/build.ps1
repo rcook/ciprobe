@@ -72,7 +72,7 @@ function main {
     Write-Output $buildInfo.Version | Out-File -Encoding ascii -FilePath $artifactsDir\version.txt
 
     $versionPath = Resolve-Path -Path $artifactsDir\version.txt
-    $executablePath = Resolve-Path -Path "$($buildInfo.BuildDir)\target\release\hello-world"
+    $executablePath = Resolve-Path -Path "$($buildInfo.BuildDir)\target\release\$(Get-ExecutableFileName -BaseName hello-world)"
     $stagingDir = Join-Path -Path $artifactsDir -ChildPath $baseName
     New-Item -ErrorAction Ignore -ItemType Directory -Path $stagingDir | Out-Null
     Copy-Item -Path $versionPath -Destination $stagingDir

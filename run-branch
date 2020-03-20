@@ -6,7 +6,7 @@ this_dir=$(cd $(dirname $0); pwd -P)
 invoke() {
   APPVEYOR_BUILD_FOLDER=$this_dir \
   APPVEYOR_REPO_TAG=false \
-  APPVEYOR_REPO_BRANCH=rcook-appveyor-notes \
+  APPVEYOR_REPO_BRANCH=test-branch \
   APPVEYOR_PROJECT_SLUG=ciprobe \
     pwsh $this_dir/scripts/$1.ps1
 }

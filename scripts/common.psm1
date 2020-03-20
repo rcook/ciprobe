@@ -19,6 +19,27 @@ if ($Trace) {
     Set-PSDebug -Strict -Trace 1
 }
 
+function Get-IsWindows() {
+    [OutputType([bool])]
+    param()
+
+    (Get-Variable -ErrorAction Ignore -Name IsWindows -Scope Global) -or (($env:OS -ne $null) -and ($env:OS.IndexOf('Windows', [StringComparison]::OrdinalIgnoreCase) -ge 0))
+}
+
+function Get-IsLinux() {
+    [OutputType([bool])]
+    param()
+
+    Get-Variable -ErrorAction Ignore -Name IsLinux -Scope Global
+}
+
+function Get-IsMacOS() {
+    [OutputType([bool])]
+    param()
+
+    Get-Variable -ErrorAction Ignore -Name IsMacOS -Scope Global
+}
+
 function Invoke-ExternalCommand {
     param()
 
@@ -38,6 +59,21 @@ function Invoke-ExternalCommand {
         throw "$command $commandArgs failed with exit status $result"
     }
 }
+Export-ModuleMember -Function Invoke-ExternalCommand
+
+function Get-ExecutableFileName {
+    [OutputType([string])]
+    param([string] $BaseName)
+
+    if (Get-IsWindows) {
+        "$($BaseName).exe"
+    } elseif (Get-IsLinux -or Get-IsMacOS) {
+        $BaseName
+    } else {
+        throw 'Unsupported platform'
+    }
+}
+Export-ModuleMember -Function Get-ExecutableFileName
 
 function getEnv {
     [OutputType([string])]
@@ -57,11 +93,11 @@ function getPlatformId {
     [OutputType([string])]
     param()
 
-    if ($IsWindows -or (($env:OS -ne $null) -and ($env:OS.IndexOf('Windows', [StringComparison]::OrdinalIgnoreCase) -ge 0))) {
+    if (Get-IsWindows) {
         'x86_64-windows'
-    } elseif ($IsLinux) {
+    } elseif (Get-IsLinux) {
         'x86_64-linux'
-    } elseif ($IsMacOS) {
+    } elseif (Get-IsMacOS) {
         'x86_64-macos'
     } else {
         throw 'Unsupported platform'
@@ -76,6 +112,8 @@ class BuildInfo {
     [string] $RefName
     [Version] $Version
 }
+Export-ModuleMember -Function Get-ExecutableFileName
+
 
 class Version {
     [string] $GitDescription
@@ -173,3 +211,4 @@ function Get-AppVeyorBuildInfo {
         Version = $version
     }
 }
+Export-ModuleMember -Function Get-AppVeyorBuildInfo
