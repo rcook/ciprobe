@@ -25,9 +25,9 @@ build_script:
   - echo B
   - ps: cargo -Vv
   - echo C
-  - ps: "cargo build 2>&1"
+  - ps: "$ErrorActionPreference = 'Ignore'; cargo build; $ErrorActionPreference = 'Stop'"
   - echo D
-  - ps: "cargo build --release 2>&1"
+  - ps: cargo build
   - echo E
 #  - ps: .\scripts\build.ps1
 

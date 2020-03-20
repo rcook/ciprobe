@@ -26,7 +26,8 @@ function Get-IsWindows() {
     $var = Get-Variable -ErrorAction Ignore -Name IsWindows -Scope Global
     if ($var -ne $null -and ([bool] $var.Value)) {
         $true
-    } else {
+    }
+    else {
         ($env:OS -ne $null) -and ($env:OS.IndexOf('Windows', [StringComparison]::OrdinalIgnoreCase) -ge 0)
     }
 }
@@ -63,8 +64,11 @@ function Invoke-ExternalCommand {
         $commandArgs = $Args[1..($Args.Count - 1)]
     }
 
+    $saved = $ErrorActionPreference
+    $ErrorActionPreference = 'Ignore'
     & $command $commandArgs
     $result = $LastExitCode
+    $ErrorActionPreference = $saved
     if ($result -ne 0) {
         throw "$command $commandArgs failed with exit status $result"
     }
@@ -77,9 +81,11 @@ function Get-ExecutableFileName {
 
     if (Get-IsWindows) {
         "$($BaseName).exe"
-    } elseif ((Get-IsLinux) -or (Get-IsMacOS)) {
+    }
+    elseif ((Get-IsLinux) -or (Get-IsMacOS)) {
         $BaseName
-    } else {
+    }
+    else {
         throw 'Unsupported platform'
     }
 }
@@ -88,7 +94,7 @@ Export-ModuleMember -Function Get-ExecutableFileName
 function getEnv {
     [OutputType([string])]
     param(
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory = $true)]
         [string] $Name
     )
 
@@ -105,11 +111,14 @@ function getPlatformId {
 
     if (Get-IsWindows) {
         'x86_64-windows'
-    } elseif (Get-IsLinux) {
+    }
+    elseif (Get-IsLinux) {
         'x86_64-linux'
-    } elseif (Get-IsMacOS) {
+    }
+    elseif (Get-IsMacOS) {
         'x86_64-macos'
-    } else {
+    }
+    else {
         throw 'Unsupported platform'
     }
 }
@@ -156,12 +165,14 @@ function Get-AppVeyorBuildInfo {
         $commitOffset = [int] $gitDescriptionParts[1]
         $commitHash = $gitDescriptionParts[2]
         $isDirty = $false
-    } elseif (($gitDescriptionParts.Length -eq 4) -and ($gitDescriptionParts[3] -eq 'dirty')) {
+    }
+    elseif (($gitDescriptionParts.Length -eq 4) -and ($gitDescriptionParts[3] -eq 'dirty')) {
         $version = $gitDescriptionParts[0]
         $commitOffset = [int] $gitDescriptionParts[1]
         $commitHash = $gitDescriptionParts[2]
         $isDirty = $true
-    } else {
+    }
+    else {
         throw "Invalid Git description $gitDescription"
     }
 
@@ -200,25 +211,25 @@ function Get-AppVeyorBuildInfo {
 
     $version = [Version] @{
         GitDescription = $gitDescription
-        IsDirty = $isDirty
-        PlatformId = $platformId
-        Version = $version
-        CommitOffset = $commitOffset
-        CommitHash = $commitHash
-        VersionParts = $versionParts
-        Major = $major
-        Minor = $minor
-        Patch = $patch
-        FullVersion = $fullVersion
+        IsDirty        = $isDirty
+        PlatformId     = $platformId
+        Version        = $version
+        CommitOffset   = $commitOffset
+        CommitHash     = $commitHash
+        VersionParts   = $versionParts
+        Major          = $major
+        Minor          = $minor
+        Patch          = $patch
+        FullVersion    = $fullVersion
     }
 
     [BuildInfo] @{
-        BuildDir = $buildDir
+        BuildDir    = $buildDir
         ProjectSlug = $projectSlug
-        IsTag = $isTag
-        IsBranch = $isBranch
-        RefName = $refName
-        Version = $version
+        IsTag       = $isTag
+        IsBranch    = $isBranch
+        RefName     = $refName
+        Version     = $version
     }
 }
 Export-ModuleMember -Function Get-AppVeyorBuildInfo
