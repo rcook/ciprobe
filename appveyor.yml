@@ -3,10 +3,10 @@ environment:
   matrix:
     - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
       RUST_PLATFORM_TRIPLE: x86_64-pc-windows-msvc
-    - APPVEYOR_BUILD_WORKER_IMAGE: macOS
-      RUST_PLATFORM_TRIPLE: x86_64-apple-darwin
-    - APPVEYOR_BUILD_WORKER_IMAGE: Ubuntu
-      RUST_PLATFORM_TRIPLE: x86_64-unknown-linux-gnu
+#    - APPVEYOR_BUILD_WORKER_IMAGE: macOS
+#      RUST_PLATFORM_TRIPLE: x86_64-apple-darwin
+#    - APPVEYOR_BUILD_WORKER_IMAGE: Ubuntu
+#      RUST_PLATFORM_TRIPLE: x86_64-unknown-linux-gnu
 
 build: false
 
