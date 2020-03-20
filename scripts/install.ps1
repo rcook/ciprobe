@@ -11,6 +11,7 @@
 param(
     [switch] $Trace,
     [switch] $DumpEnv
+    [switch] $Clean
 )
 
 $ErrorActionPreference = 'Stop'
@@ -71,8 +72,15 @@ function main {
     [OutputType([void])]
     param(
         [Parameter(Mandatory=$true)]
-        [bool] $DumpEnv
+        [bool] $DumpEnv,
+        [Parameter(Mandatory=$true)]
+        [bool] $Clean
     )
+
+    if ($Clean) {
+        Invoke-ExternalCommand git checkout -- .
+        Invoke-ExternalCommand git clean -fxd
+    }
 
     if ($DumpEnv) {
         dumpEnv
