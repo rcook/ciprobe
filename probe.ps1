@@ -108,7 +108,7 @@ class Version {
     [bool] $IsDirty
     [string] $PlatformId
     [string] $Version
-    [int] $Offset
+    [int] $CommitOffset
     [string] $CommitHash
     [object] $VersionParts
     [object] $Major
@@ -129,12 +129,12 @@ function getVersionAppVeyor {
     $gitDescriptionParts = $gitDescription.Split('-')
     if ($gitDescriptionParts.Length -eq 3) {
         $version = $gitDescriptionParts[0]
-        $offset = [int] $gitDescriptionParts[1]
+        $commitOffset = [int] $gitDescriptionParts[1]
         $commitHash = $gitDescriptionParts[2]
         $isDirty = $false
     } elseif (($gitDescriptionParts.Length -eq 4) -and ($gitDescriptionParts[3] -eq 'dirty')) {
         $version = $gitDescriptionParts[0]
-        $offset = [int] $gitDescriptionParts[1]
+        $commitOffset = [int] $gitDescriptionParts[1]
         $commitHash = $gitDescriptionParts[2]
         $isDirty = $true
     } else {
@@ -158,8 +158,8 @@ function getVersionAppVeyor {
 
     $fullVersion = $version
 
-    if ($offset -gt 0) {
-        $fullVersion += "-$offset"
+    if ($commitOffset -gt 0) {
+        $fullVersion += "-$commitOffset"
     }
 
     $fullVersion += "-$commitHash"
@@ -182,7 +182,7 @@ function getVersionAppVeyor {
         IsDirty = $isDirty
         PlatformId = $platformId
         Version = $version
-        Offset = $offset
+        CommitOffset = $commitOffset
         CommitHash = $commitHash
         VersionParts = $versionParts
         Major = $major
