@@ -8,6 +8,7 @@ build: false
 
 install:
   - ps: Write-Output "t=$($env:GitHub_auth_token)"
+  - ps: Write-Output "t=$($env:SUPER_SECRET)"
   - ps: .\scripts\install.ps1
 
 build_script:
