@@ -7,13 +7,13 @@ environment:
 build: false
 
 install:
-  - ps: .\install.ps1 -DumpEnv
+  - ps: .\scripts\install.ps1 -DumpEnv
 
 build_script:
-  - ps: .\build.ps1
+  - ps: .\scripts\build.ps1
 
 test_script:
-  - ps: .\test.ps1
+  - ps: .\scripts\test.ps1
 
 artifacts:
   - path: _artifacts/build.txt
