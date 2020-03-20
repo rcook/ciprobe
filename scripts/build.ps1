@@ -73,7 +73,6 @@ function main {
     fixUpCargoToml -BuildInfo $buildInfo
 
     $cargoBinDir = Resolve-Path -Path "$(Get-HomeDir)\.cargo\bin"
-
     $savedPath = $env:PATH
     $env:PATH = $env:PATH + [System.IO.Path]::PathSeparator + $cargoBinDir
     try {
