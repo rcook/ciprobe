@@ -7,7 +7,7 @@ environment:
 build: false
 
 install:
-  - ps: .\scripts\install.ps1 -DumpEnv -Detailed -RustupInit
+  - ps: .\scripts\install.ps1 -RustupInit
 
 build_script:
   - ps: .\scripts\build.ps1
