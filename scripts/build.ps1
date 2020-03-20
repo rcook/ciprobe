@@ -72,9 +72,17 @@ function main {
 
     fixUpCargoToml -BuildInfo $buildInfo
 
-    Invoke-ExternalCommand cargo build
+    $cargoBinDir = Resolve-Path -Path "$(Get-HomeDir)\.cargo\bin"
 
-    Invoke-ExternalCommand cargo build --release
+    $savedPath = $env:PATH
+    $env:PATH = $env:PATH + [System.IO.Path]::PathSeparator + $cargoBinDir
+    try {
+        Invoke-ExternalCommand cargo build
+        Invoke-ExternalCommand cargo build --release
+    }
+    finally {
+        $env:PATH = $savedPath
+    }
 
     $targetDir = Resolve-Path -Path "$($buildInfo.BuildDir)\target"
 

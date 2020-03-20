@@ -24,9 +24,15 @@ function main {
     [OutputType([void])]
     param()
 
-    Invoke-ExternalCommand cargo test
-
-    Invoke-ExternalCommand cargo test --release
+    $savedPath = $env:PATH
+    $env:PATH = $env:PATH + [System.IO.Path]::PathSeparator + $cargoBinDir
+    try {
+        Invoke-ExternalCommand cargo test
+        Invoke-ExternalCommand cargo test --release
+    }
+    finally {
+        $env:PATH = $savedPath
+    }
 }
 
 Write-Output 'Test step'

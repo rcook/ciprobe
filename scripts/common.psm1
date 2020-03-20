@@ -55,11 +55,11 @@ function Invoke-ExternalCommand {
         $commandArgs = $Args[1..($Args.Count - 1)]
     }
 
-    $saved = $ErrorActionPreference
+    $savedErrorActionPreference = $ErrorActionPreference
     $ErrorActionPreference = 'SilentlyContinue'
     & $command $commandArgs
     $result = $LastExitCode
-    $ErrorActionPreference = $saved
+    $ErrorActionPreference = $savedErrorActionPreference
     if ($result -ne 0) {
         throw "$command $commandArgs failed with exit status $result"
     }
@@ -268,3 +268,16 @@ function Get-LocalBuildInfo {
     }
 }
 Export-ModuleMember -Function Get-LocalBuildInfo
+
+function Get-HomeDir {
+    [OutputType([object])]
+    param()
+
+    if ($env:USERPROFILE -ne $null) {
+        $env:USERPROFILE
+    }
+    else {
+        $env:HOME
+    }
+}
+Export-ModuleMember -Function Get-HomeDir
