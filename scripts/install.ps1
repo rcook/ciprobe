@@ -12,6 +12,7 @@ param(
     [switch] $Trace,
     [switch] $DumpEnv,
     [switch] $Detailed,
+    [switch] $RustupInit,
     [switch] $Clean
 )
 
@@ -92,6 +93,8 @@ function main {
         [Parameter(Mandatory = $true)]
         [bool] $Detailed,
         [Parameter(Mandatory = $true)]
+        [bool] $RustupInit,
+        [Parameter(Mandatory = $true)]
         [bool] $Clean
     )
 
@@ -103,7 +106,49 @@ function main {
     if ($DumpEnv) {
         dumpEnv -Detailed $Detailed
     }
+
+    #    - cmd: rustup-init.exe --default-host %RUST_PLATFORM_TRIPLE% --default-toolchain %RUST_CHANNEL% --profile minimal -y
+
+
+    if ($RustupInit) {
+        if (Get-IsWindows) {
+            $rustupInitUri = 'https://win.rustup.rs'
+            $rustPlatformTriple = 'x86_64-pc-windows-msvc'
+            $rustupInitShell = $null
+            $rustupInitPath = ".\rustup-init.exe"
+        }
+        elseif (Get-IsLinux) {
+            $rustupInitUri = 'https://sh.rustup.rs'
+            $rustPlatformTriple = 'x86_64-unknown-linux-gnu'
+            $rustupInitShell = 'sh'
+            $rustupInitPath = './rustup-init.sh'
+        }
+        elseif (Get-IsMacOS) {
+            $rustupInitUri = 'https://sh.rustup.rs'
+            $rustPlatformTriple = 'x86_64-apple-darwin'
+            $rustupInitShell = 'sh'
+            $rustupInitPath = './rustup-init.sh'
+        }
+        else {
+            throw 'Unsupported platform'
+        }
+
+        if (-not (Test-Path -Path $rustupInitPath)) {
+            Invoke-WebRequest -Uri $rustupInitUri -OutFile $rustupInitPath
+        }
+
+        $rustChannel = 'nightly'
+        Invoke-ExternalCommand $rustupInitShell $rustupInitPath -- `
+            --default-host $rustPlatformTriple `
+            --default-toolchain $rustChannel `
+            --profile minimal `
+            -y
+    }
 }
 
 Write-Output 'Install step'
-main -DumpEnv $DumpEnv -Detailed $Detailed -Clean $Clean
+main `
+    -DumpEnv $DumpEnv `
+    -Detailed $Detailed `
+    -RustupInit $RustupInit `
+    -Clean $Clean
