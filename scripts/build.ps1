@@ -173,6 +173,8 @@ function getAppVeyorBuildInfo {
     }
 }
 
+Write-Output 'Build step'
+
 $buildInfo = getAppVeyorBuildInfo
 $baseName = "$($buildInfo.ProjectSlug)-$($buildInfo.Version.FullVersion)"
 

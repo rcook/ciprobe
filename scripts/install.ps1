@@ -85,6 +85,8 @@ function dumpEnv {
     Write-Output "  $(invoke git describe --long --dirty)"
 }
 
+Write-Output 'Install step'
+
 if ($DumpEnv) {
     dumpEnv
 }
