@@ -20,7 +20,8 @@ install:
   - ps: .\scripts\install.ps1
 
 build_script:
-  - ps: .\scripts\build.ps1
+  - cargo build
+#  - ps: .\scripts\build.ps1
 
 test_script:
   - ps: .\scripts\test.ps1
