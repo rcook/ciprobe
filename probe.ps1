@@ -41,13 +41,13 @@ Write-Output "thisDir: $thisDir"
 Write-Output "currentDir: $currentDir"
 
 Write-Output "Files under $($thisDir):"
-Get-ChildItem -Recurse -Path $thisDir | Sort-Object FullName | ForEach-Object {
+Get-ChildItem -Force -Recurse -Path $thisDir | Sort-Object FullName | ForEach-Object {
     Write-Output "  $($_.FullName)"
 }
 
 if ($thisDir -ne $currentDir) {
     Write-Output "Files under $($currentDir):"
-    Get-ChildItem -Recurse -Path $currentDir | Sort-Object FullName | ForEach-Object {
+    Get-ChildItem -Force -Recurse -Path $currentDir | Sort-Object FullName | ForEach-Object {
         Write-Output "  $($_.FullName)"
     }
 }
