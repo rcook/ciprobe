@@ -69,6 +69,6 @@ function dumpEnv {
 
 Write-Output 'Install step'
 
-#if ($DumpEnv) {
+if ($DumpEnv) {
     dumpEnv
-#}
+}
