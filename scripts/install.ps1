@@ -67,8 +67,17 @@ function dumpEnv {
     Write-Output "  $(Invoke-ExternalCommand git describe --long --dirty)"
 }
 
-Write-Output 'Install step'
+function main {
+    [OutputType([void])]
+    param(
+        [Parameter(Mandatory=$true)]
+        [bool] $DumpEnv
+    )
 
-if ($DumpEnv) {
-    dumpEnv
+    if ($DumpEnv) {
+        dumpEnv
+    }
 }
+
+Write-Output 'Install step'
+main -DumpEnv $DumpEnv
