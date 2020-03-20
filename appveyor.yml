@@ -27,7 +27,7 @@ deploy:
   description: Official release
   artifact: zip
   auth_token:
-    secure: $(GitHub_auth_token)
+    secure: '%GitHub_auth_token%'
   provider: GitHub
   on:
     branch: master
