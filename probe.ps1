@@ -71,3 +71,6 @@ Write-Output 'Git branches:'
 invoke git branch -vv -a --color=never | ForEach-Object {
     Write-Output "  $_"
 }
+
+Write-Output 'Git describe:'
+Write-Output "  $(invoke git describe --long --dirty)"
