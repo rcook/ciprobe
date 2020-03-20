@@ -3,7 +3,7 @@ set -euo pipefail
 
 this_dir=$(cd $(dirname $0); pwd -P)
 
-export APPVEYOR_BUILD_FOLDER=$this_dir
+export APPVEYOR_BUILD_FOLDER=$(cd $(dirname $this_dir); pwd -P)
 export APPVEYOR_REPO_TAG=true
 export APPVEYOR_REPO_BRANCH=v101
 export APPVEYOR_PROJECT_SLUG=ciprobe
