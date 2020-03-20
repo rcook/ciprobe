@@ -85,4 +85,5 @@ function main {
 }
 
 Write-Output 'Build step'
+Write-Output "cargo: $(Get-Command -ErrorAction Ignore -Name cargo | Select-Object Source)"
 main
