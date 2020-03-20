@@ -9,9 +9,6 @@
 
 $ErrorActionPreference = 'Stop'
 Set-StrictMode -Version Latest
-if ($Trace) {
-    Set-PSDebug -Strict -Trace 1
-}
 
 function Get-IsWindows() {
     [OutputType([bool])]

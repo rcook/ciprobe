@@ -1,6 +1,6 @@
 $ErrorActionPreference = 'Stop'
 
-$env:APPVEYOR_BUILD_FOLDER = $PSScriptRoot
+$env:APPVEYOR_BUILD_FOLDER = Resolve-Path -Path $PSScriptRoot\..
 $env:APPVEYOR_REPO_TAG = 'true'
 $env:APPVEYOR_REPO_BRANCH = 'v100'
 $env:APPVEYOR_PROJECT_SLUG = 'ciprobe'
