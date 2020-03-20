@@ -212,3 +212,5 @@ Compress-Archive `
     -DestinationPath $artifactsDir\$baseName.zip `
     -CompressionLevel Optimal `
     -Path $stagingDir
+
+throw 'FAIL'
