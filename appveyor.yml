@@ -25,9 +25,9 @@ build_script:
   - echo B
   - ps: cargo -Vv
   - echo C
-  - ps: cargo build
+  - ps: & cargo build
   - echo D
-  - ps: cargo build --release
+  - ps: & cargo build --release
   - echo E
 #  - ps: .\scripts\build.ps1
 
