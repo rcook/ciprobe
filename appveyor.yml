@@ -21,17 +21,13 @@ install:
 
 build_script:
   - echo A
-  - rustc -Vv
-  - echo result=$?
+  - ps: rustc -Vv
   - echo B
-  - cargo -Vv
-  - echo result=$?
+  - ps: cargo -Vv
   - echo C
-  - cargo build
-  - echo result=$?
+  - ps: cargo build
   - echo D
-  - cargo build --release
-  - echo result=$?
+  - ps: cargo build --release
   - echo E
 #  - ps: .\scripts\build.ps1
 
