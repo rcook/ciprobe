@@ -5,9 +5,17 @@
 .DESCRIPTION
     Gather information like environment variables etc.
 #>
+#Requires -Version 5
 
 [CmdletBinding()]
-param()
+param(
+    [switch] $Trace
+)
+
+Set-StrictMode -Version Latest
+if ($Trace) {
+    Set-PSDebug -Strict -Trace 1
+}
 
 function invoke {
     param()
@@ -77,4 +85,57 @@ function dumpEnv {
     Write-Output "  $(invoke git describe --long --dirty)"
 }
 
-dumpEnv
+function getPlatformId {
+    [OutputType([string])]
+    param()
+
+    if ($IsWindows -or (($env:OS -ne $null) -and ($env:OS.IndexOf('Windows', [StringComparison]::OrdinalIgnoreCase) -ge 0))) {
+        'x86_64-windows'
+    } elseif ($IsLinux) {
+        'x86_64-linux'
+    } elseif ($IsMacOS) {
+        'x86_64-macos'
+    } else {
+        throw 'Unsupported platform'
+    }
+}
+
+class Version {
+    [bool] $IsTagged
+    [string] $GitDescription
+    [bool] $IsDirty
+    [string] $PlatformId
+    [string] $FullVersion
+}
+
+function getVersionAppVeyor {
+    [OutputType([Version])]
+    param()
+
+    $isTagged = $env:APPVEYOR_REPO_TAG -eq 'true'
+
+    $gitDescription = $(invoke git describe --long --dirty --match='v[0-9]*')
+    $parts = $gitDescription.Split('-')
+    if ($parts.Length -eq 3) {
+        $isDirty = $false
+    } elseif (($parts.Length -eq 4) -and ($parts[3] -eq 'dirty')) {
+        $isDirty = $true
+    } else {
+        throw "Invalid git description $gitDescription"
+    }
+
+    $platformId = getPlatformId
+    $fullVersion = "$gitDescription-$platformId"
+
+    [Version] @{
+        IsTagged = $isTagged
+        GitDescription = $gitDescription
+        IsDirty = $isDirty
+        PlatformId = $platformId
+        FullVersion = $fullVersion
+    }
+}
+
+#dumpEnv
+Write-Output (getVersionAppVeyor)
+Write-Output '(done)'
