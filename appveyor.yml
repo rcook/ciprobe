@@ -5,7 +5,6 @@ environment:
     - APPVEYOR_BUILD_WORKER_IMAGE: Ubuntu
 
 install:
-  - ps: $ErrorActionPreference = 'Stop'
   - ps: .\probe.ps1
 
 build: false
