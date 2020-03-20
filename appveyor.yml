@@ -25,7 +25,7 @@ build_script:
   - echo B
   - ps: cargo -Vv
   - echo C
-  - ps: "$ErrorActionPreference = 'SilentlyContinue'
+  - ps: "$ErrorActionPreference = 'SilentlyContinue'"
   - ps: cargo build
   - ps: "$ErrorActionPreference = 'Stop'"
   - echo D
