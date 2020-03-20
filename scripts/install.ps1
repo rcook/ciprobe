@@ -19,25 +19,7 @@ if ($Trace) {
     Set-PSDebug -Strict -Trace 1
 }
 
-function invoke {
-    param()
-
-    if ($args.Count -eq 0) {
-        throw 'Must supply some arguments'
-    }
-
-    $command = $Args[0]
-    $commandArgs = @()
-    if ($Args.Count -gt 1) {
-        $commandArgs = $Args[1..($Args.Count - 1)]
-    }
-
-    & $command $commandArgs
-    $result = $LastExitCode
-    if ($result -ne 0) {
-        throw "$command $commandArgs failed with exit status $result"
-    }
-}
+Import-Module -Name $PSScriptRoot\common -Force
 
 function dumpEnv {
     $thisDir = $PSScriptRoot
@@ -67,26 +49,26 @@ function dumpEnv {
     }
 
     Write-Output 'Git log:'
-    invoke git log --oneline --color=never | ForEach-Object {
+    Invoke-ExternalCommand git log --oneline --color=never | ForEach-Object {
         Write-Output "  $_"
     }
 
     Write-Output 'Git tags:'
-    invoke git tag | ForEach-Object {
-        Write-Output "  $_ $(invoke git rev-list -n 1 $_)"
+    Invoke-ExternalCommand git tag | ForEach-Object {
+        Write-Output "  $_ $(Invoke-ExternalCommand git rev-list -n 1 $_)"
     }
 
     Write-Output 'Git branches:'
-    invoke git branch -vv -a --color=never | ForEach-Object {
+    Invoke-ExternalCommand git branch -vv -a --color=never | ForEach-Object {
         Write-Output "  $_"
     }
 
     Write-Output 'Git describe:'
-    Write-Output "  $(invoke git describe --long --dirty)"
+    Write-Output "  $(Invoke-ExternalCommand git describe --long --dirty)"
 }
 
 Write-Output 'Install step'
 
-if ($DumpEnv) {
+#if ($DumpEnv) {
     dumpEnv
-}
+#}

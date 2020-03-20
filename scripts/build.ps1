@@ -18,25 +18,7 @@ if ($Trace) {
     Set-PSDebug -Strict -Trace 1
 }
 
-function invoke {
-    param()
-
-    if ($args.Count -eq 0) {
-        throw 'Must supply some arguments'
-    }
-
-    $command = $Args[0]
-    $commandArgs = @()
-    if ($Args.Count -gt 1) {
-        $commandArgs = $Args[1..($Args.Count - 1)]
-    }
-
-    & $command $commandArgs
-    $result = $LastExitCode
-    if ($result -ne 0) {
-        throw "$command $commandArgs failed with exit status $result"
-    }
-}
+Import-Module -Name $PSScriptRoot\common -Force
 
 function getEnv {
     [OutputType([string])]
@@ -100,7 +82,7 @@ function getAppVeyorBuildInfo {
     $isBranch = (getEnv -Name APPVEYOR_REPO_TAG) -ne 'true'
     $refName = getEnv -Name APPVEYOR_REPO_BRANCH
 
-    $gitDescription = $(invoke git describe --long --dirty --match='v[0-9]*')
+    $gitDescription = $(Invoke-ExternalCommand git describe --long --dirty --match='v[0-9]*')
     $gitDescriptionParts = $gitDescription.Split('-')
     if ($gitDescriptionParts.Length -eq 3) {
         $version = $gitDescriptionParts[0]
