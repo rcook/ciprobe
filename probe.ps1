@@ -107,6 +107,7 @@ class Version {
     [string] $PlatformId
     [string] $Version
     [int] $Offset
+    [string] $CommitHash
     [object] $VersionParts
     [object] $Major
     [object] $Minor
@@ -125,10 +126,12 @@ function getVersionAppVeyor {
     if ($gitDescriptionParts.Length -eq 3) {
         $version = $gitDescriptionParts[0]
         $offset = [int] $gitDescriptionParts[1]
+        $commitHash = $gitDescriptionParts[2]
         $isDirty = $false
     } elseif (($gitDescriptionParts.Length -eq 4) -and ($gitDescriptionParts[3] -eq 'dirty')) {
         $version = $gitDescriptionParts[0]
         $offset = [int] $gitDescriptionParts[1]
+        $commitHash = $gitDescriptionParts[2]
         $isDirty = $true
     } else {
         throw "Invalid Git description $gitDescription"
@@ -148,7 +151,20 @@ function getVersionAppVeyor {
     $patch = if ($versionParts.Length -gt 2) { [int] $versionParts[2] } else { $null }
 
     $platformId = getPlatformId
-    $fullVersion = "$gitDescription-$platformId"
+
+    $fullVersion = $version
+
+    if ($offset -gt 0) {
+        $fullVersion += "-$offset"
+    }
+
+    $fullVersion += "-$commitHash"
+
+    if ($isDirty) {
+        $fullVersion += '-dirty'
+    }
+
+    $fullVersion += "-$platformId"
 
     [Version] @{
         IsTagged = $isTagged
@@ -157,6 +173,7 @@ function getVersionAppVeyor {
         PlatformId = $platformId
         Version = $version
         Offset = $offset
+        CommitHash = $commitHash
         VersionParts = $versionParts
         Major = $major
         Minor = $minor
