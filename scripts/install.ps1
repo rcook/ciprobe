@@ -1,6 +1,6 @@
 <#
 .SYNOPSIS
-    Install step..
+    Install step.
 
 .DESCRIPTION
     Install step.

@@ -1,0 +1,16 @@
+#!/bin/bash
+set -euo pipefail
+
+this_dir=$(cd $(dirname $0); pwd -P)
+
+invoke() {
+  APPVEYOR_BUILD_FOLDER=$this_dir \
+  APPVEYOR_REPO_TAG=true \
+  APPVEYOR_REPO_BRANCH=v100 \
+  APPVEYOR_PROJECT_SLUG=ciprobe \
+    pwsh $this_dir/scripts/$1.ps1
+}
+
+invoke install
+invoke build
+invoke test

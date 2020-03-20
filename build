@@ -1,6 +1,0 @@
-#!/bin/bash
-set -euo pipefail
-
-this_dir=$(cd $(dirname $0); pwd -P)
-
-pwsh $this_dir/build.ps1 $*
