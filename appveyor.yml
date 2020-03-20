@@ -19,10 +19,10 @@ install:
   - cmd: rustup-init.exe --default-host %TARGET% --default-toolchain %CHANNEL% --profile minimal -y
   - rustc -Vv
   - cargo --version
-  - ps: .\scripts\install.ps1
+  - ps: .\scripts\install.ps1 -DumpEnv
 
 build_script:
-  - ps: .\scripts\build.ps1
+  - ps: .\scripts\build.ps1 -Trace
 
 test_script:
   - ps: .\scripts\test.ps1
