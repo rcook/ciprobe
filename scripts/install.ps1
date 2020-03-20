@@ -107,14 +107,11 @@ function main {
         dumpEnv -Detailed $Detailed
     }
 
-    #    - cmd: rustup-init.exe --default-host %RUST_PLATFORM_TRIPLE% --default-toolchain %RUST_CHANNEL% --profile minimal -y
-
-
     if ($RustupInit) {
         if (Get-IsWindows) {
             $rustupInitUri = 'https://win.rustup.rs'
             $rustPlatformTriple = 'x86_64-pc-windows-msvc'
-            $rustupInitShell = $null
+            $rustupInitShell = ''
             $rustupInitPath = ".\rustup-init.exe"
         }
         elseif (Get-IsLinux) {
