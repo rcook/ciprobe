@@ -9,7 +9,8 @@
 
 [CmdletBinding()]
 param(
-    [switch] $Trace
+    [switch] $Trace,
+    [switch] $DumpEnv
 )
 
 Set-StrictMode -Version Latest
@@ -38,6 +39,20 @@ function invoke {
 }
 
 $ErrorActionPreference = 'Stop'
+
+function getEnv {
+    [OutputType([string])]
+    param(
+        [Parameter(Mandatory=$true)]
+        [string] $Name
+    )
+
+    $value = [System.Environment]::GetEnvironmentVariable($Name)
+    if ($value -eq $null) {
+        throw "Environment variable $Name not defined"
+    }
+    $value
+}
 
 function dumpEnv {
     $thisDir = $PSScriptRoot
@@ -100,11 +115,16 @@ function getPlatformId {
     }
 }
 
-class Version {
+class BuildInfo {
+    [string] $BuildDir
     [string] $ProjectSlug
     [bool] $IsTag
     [bool] $IsBranch
     [string] $RefName
+    [Version] $Version
+}
+
+class Version {
     [string] $GitDescription
     [bool] $IsDirty
     [string] $PlatformId
@@ -118,14 +138,15 @@ class Version {
     [string] $FullVersion
 }
 
-function getVersionAppVeyor {
-    [OutputType([Version])]
+function getAppVeyorBuildInfo {
+    [OutputType([BuildInfo])]
     param()
 
-    $projectSlug = $env:APPVEYOR_PROJECT_SLUG
-    $isTag = $env:APPVEYOR_REPO_TAG -eq 'true'
-    $isBranch = $env:APPVEYOR_REPO_TAG -ne 'true'
-    $refName = $env:APPVEYOR_REPO_BRANCH
+    $buildDir = getEnv -Name APPVEYOR_BUILD_FOLDER
+    $projectSlug = getEnv -Name APPVEYOR_PROJECT_SLUG
+    $isTag = (getEnv -Name APPVEYOR_REPO_TAG) -eq 'true'
+    $isBranch = (getEnv -Name APPVEYOR_REPO_TAG) -ne 'true'
+    $refName = getEnv -Name APPVEYOR_REPO_BRANCH
 
     $gitDescription = $(invoke git describe --long --dirty --match='v[0-9]*')
     $gitDescriptionParts = $gitDescription.Split('-')
@@ -176,11 +197,7 @@ function getVersionAppVeyor {
 
     $fullVersion += "-$platformId"
 
-    [Version] @{
-        ProjectSlug = $projectSlug
-        IsTag = $isTag
-        IsBranch = $isBranch
-        RefName = $refName
+    $version = [Version] @{
         GitDescription = $gitDescription
         IsDirty = $isDirty
         PlatformId = $platformId
@@ -193,21 +210,34 @@ function getVersionAppVeyor {
         Patch = $patch
         FullVersion = $fullVersion
     }
+
+    [BuildInfo] @{
+        BuildDir = $buildDir
+        ProjectSlug = $projectSlug
+        IsTag = $isTag
+        IsBranch = $isBranch
+        RefName = $refName
+        Version = $version
+    }
 }
 
-#dumpEnv
+if ($DumpEnv) {
+    dumpEnv
+}
 
-$version = getVersionAppVeyor
-$baseName = "$($version.ProjectSlug)-$($version.FullVersion)"
+$buildInfo = getAppVeyorBuildInfo
+$baseName = "$($buildInfo.ProjectSlug)-$($buildInfo.Version.FullVersion)"
 
-$artifactsDir = Join-Path -Path $env:APPVEYOR_BUILD_FOLDER -ChildPath _artifacts
+$artifactsDir = Join-Path -Path $buildInfo.BuildDir -ChildPath _artifacts
 New-Item -ErrorAction Ignore -ItemType Directory -Path $artifactsDir | Out-Null
 $stagingDir = Join-Path -Path $artifactsDir -ChildPath $baseName
 New-Item -ErrorAction Ignore -ItemType Directory -Path $stagingDir | Out-Null
 
-Write-Output $version | Out-File -Encoding ascii -FilePath $stagingDir\version.txt
-Write-Output 'Hello world' | Out-File -Encoding ascii -FilePath $stagingDir\data.txt
+Write-Output $buildInfo | Out-File -Encoding ascii -FilePath $artifactsDir\build.txt
+Write-Output $buildInfo.Version | Out-File -Encoding ascii -FilePath $artifactsDir\version.txt
 
+Write-Output $buildInfo.Version | Out-File -Encoding ascii -FilePath $stagingDir\version.txt
+Write-Output 'Hello world' | Out-File -Encoding ascii -FilePath $stagingDir\payload.txt
 Compress-Archive `
     -DestinationPath $artifactsDir\$baseName.zip `
     -CompressionLevel Optimal `

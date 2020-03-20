@@ -16,4 +16,6 @@ test_script:
   - echo test_script
 
 artifacts:
+  - path: _artifacts/build.txt
+  - path: _artifacts/version.txt
   - path: _artifacts/*.zip

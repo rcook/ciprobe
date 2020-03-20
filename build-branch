@@ -7,4 +7,4 @@ APPVEYOR_BUILD_FOLDER=$this_dir \
 APPVEYOR_REPO_TAG=false \
 APPVEYOR_REPO_BRANCH=rcook-appveyor-notes \
 APPVEYOR_PROJECT_SLUG=ciprobe \
-  pwsh $this_dir/probe.ps1 $*
+  pwsh $this_dir/build.ps1 $*
