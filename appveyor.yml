@@ -19,3 +19,13 @@ artifacts:
   - path: _artifacts/build.txt
   - path: _artifacts/version.txt
   - path: _artifacts/*.zip
+
+deploy:
+  description: Official release
+  artifact: _artifacts/*.zip
+  auth_token:
+    secure: $(GH_TOKEN)
+  provider: GitHub
+  on:
+    branch: master
+    APPVEYOR_REPO_TAG: true
