@@ -194,4 +194,3 @@ function getVersionAppVeyor {
 
 #dumpEnv
 Write-Output (getVersionAppVeyor)
-Write-Output '(done)'
