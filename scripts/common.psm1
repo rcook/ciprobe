@@ -240,3 +240,34 @@ function Get-AppVeyorBuildInfo {
     }
 }
 Export-ModuleMember -Function Get-AppVeyorBuildInfo
+
+function Get-LocalBuildInfo {
+    [OutputType([BuildInfo])]
+    param()
+
+    $version = [Version] @{
+        HomePageUri    = '(none)'
+        ReleasesUri    = '(none)'
+        GitDescription = '(none)'
+        IsDirty        = $false
+        PlatformId     = '(none)'
+        Version        = '(none)'
+        CommitOffset   = 0
+        CommitHash     = '(none)'
+        VersionParts   = @()
+        Major          = $null
+        Minor          = $null
+        Patch          = $null
+        FullVersion    = 'Development'
+    }
+
+    [BuildInfo] @{
+        BuildDir    = Resolve-Path -Path $PSScriptRoot\..
+        ProjectSlug = '(none)'
+        IsTag       = $false
+        IsBranch    = $false
+        RefName     = '(none)'
+        Version     = $version
+    }
+}
+Export-ModuleMember -Function Get-LocalBuildInfo

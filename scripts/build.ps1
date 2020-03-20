@@ -61,7 +61,13 @@ function main {
     [OutputType([void])]
     param()
 
-    $buildInfo = Get-AppVeyorBuildInfo
+    if (Get-IsAppVeyorBuild) {
+        $buildInfo = Get-AppVeyorBuildInfo
+    }
+    else {
+        $buildInfo = Get-LocalBuildInfo
+    }
+
     $baseName = "$($buildInfo.ProjectSlug)-$($buildInfo.Version.FullVersion)"
 
     fixUpCargoToml -BuildInfo $buildInfo
