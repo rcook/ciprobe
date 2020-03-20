@@ -23,7 +23,7 @@ Import-Module -Name $PSScriptRoot\common -Force
 function fixUpCargoToml {
     [OutputType([void])]
     param(
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory = $true)]
         [object] $BuildInfo
     )
 
@@ -31,19 +31,22 @@ function fixUpCargoToml {
     $cargoVersion = ''
     if ($version.Major -eq $null) {
         $cargoVersion += '0'
-    } else {
+    }
+    else {
         $cargoVersion += $version.Major
     }
     $cargoVersion += '.'
     if ($version.Minor -eq $null) {
         $cargoVersion += '0'
-    } else {
+    }
+    else {
         $cargoVersion += $version.Minor
     }
     $cargoVersion += '.'
     if ($version.Patch -eq $null) {
         $cargoVersion += '0'
-    } else {
+    }
+    else {
         $cargoVersion += $version.Patch
     }
 
@@ -63,11 +66,9 @@ function main {
 
     fixUpCargoToml -BuildInfo $buildInfo
 
-    cargo build
-    #Invoke-ExternalCommand cargo build
+    Invoke-ExternalCommand cargo build
 
-    cargo build --release
-    #Invoke-ExternalCommand cargo build --release
+    Invoke-ExternalCommand cargo build --release
 
     $targetDir = Resolve-Path -Path "$($buildInfo.BuildDir)\target"
     $distDir = Join-Path -Path $targetDir -ChildPath dist
