@@ -11,6 +11,7 @@
 param(
     [switch] $Trace,
     [switch] $DumpEnv,
+    [switch] $Detailed,
     [switch] $Clean
 )
 
@@ -23,6 +24,12 @@ if ($Trace) {
 Import-Module -Name $PSScriptRoot\common -Force
 
 function dumpEnv {
+    [OutputType([void])]
+    param(
+        [Parameter(Mandatory = $true)]
+        [bool] $Detailed
+    )
+
     $thisDir = $PSScriptRoot
     $currentDir = Get-Location
 
@@ -30,31 +37,8 @@ function dumpEnv {
     Write-Output "isMacOS: $(Get-IsMacOS)"
     Write-Output "isWindows: $(Get-IsWindows)"
     Write-Output "executableFileName: $(Get-ExecutableFileName -BaseName base-name)"
-
     Write-Output "thisDir: $thisDir"
     Write-Output "currentDir: $currentDir"
-
-    Write-Output "Files under $($thisDir):"
-    Get-ChildItem -Force -Recurse -Path $thisDir | Sort-Object FullName | ForEach-Object {
-        Write-Output "  $($_.FullName)"
-    }
-
-    if ($thisDir -ne $currentDir) {
-        Write-Output "Files under $($currentDir):"
-        Get-ChildItem -Force -Recurse -Path $currentDir | Sort-Object FullName | ForEach-Object {
-            Write-Output "  $($_.FullName)"
-        }
-    }
-
-    Write-Output 'Environment:'
-    Get-ChildItem -Path Env: | Sort-Object Key | ForEach-Object {
-        Write-Output "  $($_.Key) = $($_.Value)"
-    }
-
-    Write-Output 'Git log:'
-    Invoke-ExternalCommand git log --oneline --color=never | ForEach-Object {
-        Write-Output "  $_"
-    }
 
     Write-Output 'Git tags:'
     Invoke-ExternalCommand git tag | ForEach-Object {
@@ -68,6 +52,36 @@ function dumpEnv {
 
     Write-Output 'Git describe:'
     Write-Output "  $(Invoke-ExternalCommand git describe --long --dirty)"
+
+    if (Get-IsAppVeyorBuild) {
+        $buildInfo = Get-AppVeyorBuildInfo
+        Write-Output $buildInfo
+        Write-Output $buildInfo.Version
+    }
+
+    if ($Detailed) {
+        Write-Output 'Environment:'
+        Get-ChildItem -Path Env: | Sort-Object Key | ForEach-Object {
+            Write-Output "  $($_.Key) = $($_.Value)"
+        }
+
+        Write-Output "Files under $($thisDir):"
+        Get-ChildItem -Force -Recurse -Path $thisDir | Sort-Object FullName | ForEach-Object {
+            Write-Output "  $($_.FullName)"
+        }
+
+        if ($thisDir -ne $currentDir) {
+            Write-Output "Files under $($currentDir):"
+            Get-ChildItem -Force -Recurse -Path $currentDir | Sort-Object FullName | ForEach-Object {
+                Write-Output "  $($_.FullName)"
+            }
+        }
+
+        Write-Output 'Git log:'
+        Invoke-ExternalCommand git log --oneline --color=never | ForEach-Object {
+            Write-Output "  $_"
+        }
+    }
 }
 
 function main {
@@ -75,6 +89,8 @@ function main {
     param(
         [Parameter(Mandatory = $true)]
         [bool] $DumpEnv,
+        [Parameter(Mandatory = $true)]
+        [bool] $Detailed,
         [Parameter(Mandatory = $true)]
         [bool] $Clean
     )
@@ -85,9 +101,9 @@ function main {
     }
 
     if ($DumpEnv) {
-        dumpEnv
+        dumpEnv -Detailed $Detailed
     }
 }
 
 Write-Output 'Install step'
-main -DumpEnv $DumpEnv -Clean $Clean
+main -DumpEnv $DumpEnv -Detailed $Detailed -Clean $Clean

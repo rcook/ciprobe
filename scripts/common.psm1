@@ -131,11 +131,10 @@ class BuildInfo {
     [string] $RefName
     [Version] $Version
 }
-Export-ModuleMember -Function Get-ExecutableFileName
-
 
 class Version {
     [string] $HomePageUri
+    [string] $ReleasesUri
     [string] $GitDescription
     [bool] $IsDirty
     [string] $PlatformId
@@ -149,6 +148,14 @@ class Version {
     [string] $FullVersion
 }
 
+function Get-IsAppVeyorBuild {
+    [OutputType([bool])]
+    param()
+
+    $env:APPVEYOR_BUILD_FOLDER -ne $null
+}
+Export-ModuleMember -Function Get-IsAppVeyorBuild
+
 function Get-AppVeyorBuildInfo {
     [OutputType([BuildInfo])]
     param()
@@ -160,6 +167,7 @@ function Get-AppVeyorBuildInfo {
     $refName = getEnv -Name APPVEYOR_REPO_BRANCH
 
     $homePageUri = 'HOME-PAGE-URI'
+    $releasesUri = 'RELEASES-URI'
     $gitDescription = $(Invoke-ExternalCommand git describe --long --dirty --match='v[0-9]*')
     $gitDescriptionParts = $gitDescription.Split('-')
     if ($gitDescriptionParts.Length -eq 3) {
@@ -213,6 +221,7 @@ function Get-AppVeyorBuildInfo {
 
     $version = [Version] @{
         HomePageUri    = $homePageUri
+        ReleasesUri    = $releasesUri
         GitDescription = $gitDescription
         IsDirty        = $isDirty
         PlatformId     = $platformId
