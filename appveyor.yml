@@ -4,16 +4,16 @@ environment:
     - APPVEYOR_BUILD_WORKER_IMAGE: macOS
     - APPVEYOR_BUILD_WORKER_IMAGE: Ubuntu
 
-install:
-  - ps: .\build.ps1
-
 build: false
 
+install:
+  - ps: .\install.ps1 -DumpEnv
+
 build_script:
-  - echo build_script
+  - ps: .\build.ps1
 
 test_script:
-  - echo test_script
+  - ps: .\test.ps1
 
 artifacts:
   - path: _artifacts/build.txt
