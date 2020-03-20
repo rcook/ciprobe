@@ -1,3 +1,5 @@
 /Cargo.lock
 
+/dist/
+/output/
 /target/

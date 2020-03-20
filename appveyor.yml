@@ -10,6 +10,7 @@ install:
   - ps: .\scripts\install.ps1 -RustupInit
 
 build_script:
+  - ps: .\Compress-Scripts.ps1
   - ps: .\scripts\build.ps1
 
 test_script:
@@ -20,10 +21,12 @@ artifacts:
   - path: target/dist/version.txt
   - name: zip
     path: target/dist/*.zip
+  - name: scripts
+    path: dist/scripts.zip
 
 deploy:
   description: Official release
-  artifact: zip
+  artifact: zip,scripts
   auth_token:
     secure: KnsNe82iVYE0/gNPx55EdNiJ3q5rM9GKu+y8E/Fz5tCnybP3NZj0PEbLabX9wZzY
   provider: GitHub
