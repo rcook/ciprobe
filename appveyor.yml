@@ -5,9 +5,7 @@ environment:
 build: false
 
 install:
-  - which 7z
   - which 7za
-  - 7z --help
   - 7za --help
   - ps: Invoke-WebRequest -Uri https://github.com/rcook/rust-appveyor-build-pack/releases/latest/download/rust-appveyor-build-pack.ps1 -OutFile rust-appveyor-build-pack.ps1
   - ps: .\rust-appveyor-build-pack.ps1
