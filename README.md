@@ -23,7 +23,7 @@ git clone git@github.com/USER/PROJECT.git
 cd project
 git ls-files | xargs sed -i -e s/ciprobe/PROJECT/g -e s/a6s9xs8d65678j52/APPVEYOR-PROJECT-ID/g
 git add .
-git commit --amend --author 'FULL-NAME <EMAIL>' -C
+git commit --amend --author 'FULL-NAME <EMAIL>' -CHEAD
 ````
 
 Where you should replace the following values:
