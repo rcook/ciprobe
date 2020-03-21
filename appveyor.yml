@@ -10,7 +10,7 @@ install:
   - ps: .\scripts\install.ps1 -RustupInit
 
 build_script:
-  - ps: .\Compress-Scripts.ps1
+  - ps: .\New-RustAppVeyorBuildPack.ps1
   - ps: .\scripts\build.ps1
 
 test_script:
@@ -21,12 +21,14 @@ artifacts:
   - path: target/dist/version.txt
   - name: zip
     path: target/dist/*.zip
-  - name: scripts
-    path: dist/scripts.zip
+  - name: rust-appveyor-build-pack-zip
+    path: rust-appveyor-build-pack.zip
+  - name: rust-appveyor-build-pack
+    path: rust-appveyor-build-pack.ps1
 
 deploy:
   description: Official release from AppVeyor
-  artifact: zip,scripts
+  artifact: zip,rust-appveyor-build-pack,rust-appveyor-build-pack-zip
   auth_token:
     secure: KnsNe82iVYE0/gNPx55EdNiJ3q5rM9GKu+y8E/Fz5tCnybP3NZj0PEbLabX9wZzY
   provider: GitHub
