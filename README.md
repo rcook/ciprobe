@@ -13,6 +13,13 @@ _Template Rust project built using Cargo and [rust-appveyor-build-pack][rust-app
 
 Go to this project's [home page][home] and click _Use this template_ or directly [generate the project][generate].
 
+### Get an AppVeyor project ID
+
+* Sign into [AppVeyor][appveyor]
+* Add your GitHub project
+* Go to _Settings_ > _Badges_
+* In _Raster image URL_ box, copy and paste ID from end of the URL
+
 ### Replace the project name
 
 Clone the newly created Git repo and perform some search and replace:
@@ -39,6 +46,7 @@ Where you should replace the following values:
 
 [MIT License][licence]
 
+[appveyor]: https://appveyor.com/
 [generate]: https://github.com/rcook/ciprobe/generate
 [home]: https://github.com/rcook/ciprobe
 [latest]: https://github.com/rcook/ciprobe/releases/latest
