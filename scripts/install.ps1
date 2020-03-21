@@ -118,7 +118,7 @@ function main {
             if (-not (Test-Path -Path $rustupInitPath)) {
                 Invoke-WebRequest -Uri $rustupInitUri -OutFile $rustupInitPath
             }
-    
+
             Invoke-ExternalCommand $rustupInitPath -- `
                 --default-host $rustPlatformTriple `
                 --default-toolchain $rustChannel `
@@ -133,7 +133,7 @@ function main {
             if (-not (Test-Path -Path $rustupInitPath)) {
                 Invoke-WebRequest -Uri $rustupInitUri -OutFile $rustupInitPath
             }
-    
+
             Invoke-ExternalCommand sh $rustupInitPath -- `
                 --default-host $rustPlatformTriple `
                 --default-toolchain $rustChannel `
@@ -148,7 +148,7 @@ function main {
             if (-not (Test-Path -Path $rustupInitPath)) {
                 Invoke-WebRequest -Uri $rustupInitUri -OutFile $rustupInitPath
             }
-    
+
             Invoke-ExternalCommand sh $rustupInitPath -- `
                 --default-host $rustPlatformTriple `
                 --default-toolchain $rustChannel `
