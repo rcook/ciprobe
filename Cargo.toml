@@ -1,5 +1,5 @@
 [package]
-name = "hello-world"
+name = "ciprobe"
 version = "0.0.0"
 description = "Development"
 authors = ["Richard Cook <rcook@rcook.org>"]
