@@ -18,7 +18,7 @@ test_script:
 
 artifacts:
   - name: bpbootstrap
-    path: rust-appveyor-build-pack
+    path: rust-appveyor-build-pack.ps1
   - name: bpzip
     path: rust-appveyor-build-pack.zip
   - name: zip
