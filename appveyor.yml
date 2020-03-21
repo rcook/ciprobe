@@ -17,18 +17,18 @@ test_script:
   - ps: .\scripts\test.ps1
 
 artifacts:
-  - path: target/dist/build.txt
-  - path: target/dist/version.txt
+  - name: bpbootstrap
+    path: rust-appveyor-build-pack
+  - name: bpzip
+    path: rust-appveyor-build-pack.zip
   - name: zip
     path: target/dist/*.zip
-  - name: rust-appveyor-build-pack-zip
-    path: rust-appveyor-build-pack.zip
-  - name: rust-appveyor-build-pack
-    path: rust-appveyor-build-pack.ps1
+  - path: target/dist/build.txt
+  - path: target/dist/version.txt
 
 deploy:
   description: Official release from AppVeyor
-  artifact: zip,rust-appveyor-build-pack,rust-appveyor-build-pack-zip
+  artifact: zip,bpbootstrap,bpzip
   auth_token:
     secure: KnsNe82iVYE0/gNPx55EdNiJ3q5rM9GKu+y8E/Fz5tCnybP3NZj0PEbLabX9wZzY
   provider: GitHub
