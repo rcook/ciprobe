@@ -52,7 +52,7 @@ function dumpEnv {
     }
 
     Write-Output 'Git describe:'
-    Write-Output "  $(Invoke-ExternalCommand git describe --long --dirty)"
+    Write-Output "  $(Invoke-ExternalCommand git describe --long --dirty --match='v[0-9]*')"
 
     if (Get-IsAppVeyorBuild) {
         $buildInfo = Get-AppVeyorBuildInfo
