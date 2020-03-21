@@ -7,10 +7,39 @@ _Template Rust project built using Cargo and [rust-appveyor-build-pack][rust-app
 
 * [Latest release][latest]
 
+## Getting starting
+
+### Generate your project from this template project
+
+Go to this project's [home page][home] and click _Use this template_ or directly [generate the project][generate].
+
+### Replace the project name
+
+Clone the newly created Git repo and perform some search and replace:
+
+```bash
+cd /path/to/sources
+git clone git@github.com/user/project.git
+cd project
+git ls-files | xargs sed -i -e s/ciprobe/PROJECT-SLUG/g -e s/a6s9xs8d65678j52/APPVEYOR-PROJECT-ID/g
+git add .
+git commit --amend --author 'FULL-NAME <EMAIL>' -C
+````
+
+Where you should replace the following values:
+
+* `PROJECT-SLUG`
+* `APPVEYOR-PROJECT-ID`
+* `FULL-NAME`
+* `EMAIL`
+
+
 ## Licence
 
 [MIT License][licence]
 
+[generate]: https://github.com/rcook/ciprobe/generate
+[home]: https://github.com/rcook/ciprobe
 [latest]: https://github.com/rcook/ciprobe/releases/latest
 [licence]: LICENSE
 [rust-appveyor-build-pack]: https://github.com/rcook/rust-appveyor-build-pack
