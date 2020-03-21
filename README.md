@@ -15,4 +15,4 @@ _Template Rust project built using Cargo and [rust-appveyor-build-pack][rust-app
 [licence]: LICENSE
 [rust-appveyor-build-pack]: https://github.com/rcook/rust-appveyor-build-pack
 [status-project]: https://ci.appveyor.com/project/rcook/ciprobe
-[status-master]: (https://ci.appveyor.com/project/rcook/ciprobe/branch/master)
+[status-master]: https://ci.appveyor.com/project/rcook/ciprobe/branch/master
