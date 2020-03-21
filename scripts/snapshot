@@ -1,5 +1,0 @@
-#!/bin/bash
-
-this_dir=$(cd $(dirname $0); pwd -P)
-
-cp $this_dir/../../rust-appveyor-build-pack/src/* $this_dir
