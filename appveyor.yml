@@ -5,9 +5,8 @@ environment:
 build: false
 
 install:
-  - find / -name 7z 2> /dev/null
-  - find / -name 7za 2> /dev/null
-  - find / -name 7zr 2> /dev/null
+  - which 7za
+  - 7za --help
   - ps: Invoke-WebRequest -Uri https://github.com/rcook/rust-appveyor-build-pack/releases/latest/download/rust-appveyor-build-pack.ps1 -OutFile rust-appveyor-build-pack.ps1
   - ps: .\rust-appveyor-build-pack.ps1
   - ps: .\rust-appveyor-build-pack\install.ps1 -DumpEnv -Detailed -RustupInit
