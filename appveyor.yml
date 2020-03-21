@@ -7,10 +7,10 @@ environment:
 build: false
 
 install:
-  - ps: Get-Command -ErrorAction Ignore -Name zip
-  - ps: Get-Command -ErrorAction Ignore -Name 7z
-  - ps: Get-Command -ErrorAction Ignore -Name 7za
-  - ps: Get-Command -ErrorAction Ignore -Name 7zr
+  - ps: Get-Command -ErrorAction SilentlyContinue -Name zip
+  - ps: Get-Command -ErrorAction SilentlyContinue -Name 7z
+  - ps: Get-Command -ErrorAction SilentlyContinue -Name 7za
+  - ps: Get-Command -ErrorAction SilentlyContinue -Name 7zr
   - ps: Invoke-WebRequest -Uri https://github.com/rcook/rust-appveyor-build-pack/releases/latest/download/rust-appveyor-build-pack.ps1 -OutFile rust-appveyor-build-pack.ps1
   - ps: .\rust-appveyor-build-pack.ps1
   - ps: .\rust-appveyor-build-pack\install.ps1 -RustupInit
