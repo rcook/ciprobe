@@ -7,20 +7,17 @@ environment:
 build: false
 
 install:
-  - ps: .\scripts\install.ps1 -RustupInit
+  - ps: Invoke-WebRequest -Uri https://github.com/rcook/rust-appveyor-build-pack/releases/latest/download/rust-appveyor-build-pack.ps1 -OutFile rust-appveyor-build-pack.ps1
+  - ps: .\rust-appveyor-build-pack.ps1
+  - ps: .\rust-appveyor-build-pack\install.ps1 -RustupInit
 
 build_script:
-  - ps: .\New-RustAppVeyorBuildPack.ps1
-  - ps: .\scripts\build.ps1
+  - ps: .\rust-appveyor-build-pack\build.ps1
 
 test_script:
-  - ps: .\scripts\test.ps1
+  - ps: .\rust-appveyor-build-pack\test.ps1
 
 artifacts:
-  - name: bpbootstrap
-    path: rust-appveyor-build-pack.ps1
-  - name: bpzip
-    path: rust-appveyor-build-pack.zip
   - name: zip
     path: target/dist/*.zip
   - path: target/dist/build.txt
@@ -28,7 +25,7 @@ artifacts:
 
 deploy:
   description: Official release from AppVeyor
-  artifact: zip,bpbootstrap,bpzip
+  artifact: zip
   auth_token:
     secure: KnsNe82iVYE0/gNPx55EdNiJ3q5rM9GKu+y8E/Fz5tCnybP3NZj0PEbLabX9wZzY
   provider: GitHub
