@@ -19,20 +19,20 @@ Clone the newly created Git repo and perform some search and replace:
 
 ```bash
 cd /path/to/sources
-git clone git@github.com/user/project.git
+git clone git@github.com/USER/PROJECT.git
 cd project
-git ls-files | xargs sed -i -e s/ciprobe/PROJECT-SLUG/g -e s/a6s9xs8d65678j52/APPVEYOR-PROJECT-ID/g
+git ls-files | xargs sed -i -e s/ciprobe/PROJECT/g -e s/a6s9xs8d65678j52/APPVEYOR-PROJECT-ID/g
 git add .
 git commit --amend --author 'FULL-NAME <EMAIL>' -C
 ````
 
 Where you should replace the following values:
 
-* `PROJECT-SLUG`
+* `USER`
+* `PROJECT`
 * `APPVEYOR-PROJECT-ID`
 * `FULL-NAME`
 * `EMAIL`
-
 
 ## Licence
 
