@@ -1,5 +1,5 @@
 /Cargo.lock
+/rust-appveyor-build-pack.ps1
 
-/dist/
-/output/
+/rust-appveyor-build-pack/
 /target/
